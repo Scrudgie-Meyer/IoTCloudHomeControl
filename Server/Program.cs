@@ -14,7 +14,18 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy("AllowWebApp",
+//        builder => builder
+//            .WithOrigins("https://localhost:7202")  // Allow your front-end URL
+//            .AllowAnyMethod()
+//            .AllowAnyHeader());
+//});
+
 var app = builder.Build();
+
+//app.UseCors("AllowWebApp");
 
 // Automatically apply migrations
 using (var scope = app.Services.CreateScope())

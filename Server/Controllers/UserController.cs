@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.EntityFrameworkCore;
+using Server.Data.DBManager;
+using Server.Data.Entities;
 
 namespace Server.Controllers
 {
@@ -7,35 +9,72 @@ namespace Server.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        //// GET: api/< User
-        //public IEnumerable<string> Get()
-        //{
-        //    return new string[] { "value1", "value2" };
-        //}
+        private readonly DBSetup _context;
 
-        // GET api/< UserController>/5
+        public UserController(DBSetup context)
+        {
+            _context = context;
+        }
+
+        // GET: api/user
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<User>>> GetAllUsers()
+        {
+            return await _context.Users.ToListAsync();
+        }
+
+        // GET: api/user/{id}
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<ActionResult<User>> GetUser(int id)
         {
-            return "value";
+            var user = await _context.Users.FindAsync(id);
+
+            if (user == null)
+                return NotFound();
+
+            return Ok(user);
         }
 
-        // POST api/< UserController>
+        // POST: api/user
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult<User>> CreateUser([FromBody] User newUser)
         {
+            _context.Users.Add(newUser);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetUser), new { id = newUser.Id }, newUser);
         }
 
-        // PUT api/< UserController>/5
+        // PUT: api/user/{id}
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> UpdateUser(int id, [FromBody] User updatedUser)
         {
+            if (id != updatedUser.Id)
+                return BadRequest("User ID mismatch");
+
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
+                return NotFound();
+
+            user.Username = updatedUser.Username;
+            user.Email = updatedUser.Email;
+            user.PasswordHash = updatedUser.PasswordHash;
+
+            await _context.SaveChangesAsync();
+            return NoContent();
         }
 
-        // DELETE api/< UserController>/5
+        // DELETE: api/user/{id}
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> DeleteUser(int id)
         {
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
+                return NotFound();
+
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+            return NoContent();
         }
     }
 }
