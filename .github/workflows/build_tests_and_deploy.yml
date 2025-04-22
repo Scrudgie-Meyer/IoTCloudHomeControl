@@ -46,4 +46,4 @@ jobs:
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
           pkill -f 'dotnet' || true
-          nohup dotnet /home/ec2-user/myapp/IoTCloudHomeControl.dll --urls http://0.0.0.0:5000 &
+          nohup dotnet /home/ec2-user/myapp/Server.dll --urls http://0.0.0.0:5000 &
