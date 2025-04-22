@@ -20,10 +20,8 @@ jobs:
     - name: 📦 Restore
       run: dotnet restore
 
-    - name: 🛠️ Build Server and WebApp
-      run: |
-        dotnet build Server/Server.csproj --no-restore --configuration Release
-        dotnet build WebApp/WebApp.proj --no-restore --configuration Release
+    - name: 🛠️ Build
+      run: dotnet build --no-restore --configuration Release
 
     - name: ✅ Test
       run: dotnet test Server.Tests/Server.Tests.csproj --no-build --configuration Release --logger trx
