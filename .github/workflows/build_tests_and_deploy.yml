@@ -20,14 +20,18 @@ jobs:
     - name: 📦 Restore
       run: dotnet restore
 
-    - name: 🛠️ Build
-      run: dotnet build --no-restore --configuration Release
+    - name: 🛠️ Build Server and WebApp
+      run: |
+        dotnet build Server/Server.csproj --no-restore --configuration Release
+        dotnet build WebApp/WebApp.proj --no-restore --configuration Release
 
     - name: ✅ Test
       run: dotnet test Server.Tests/Server.Tests.csproj --no-build --configuration Release --logger trx
 
-    - name: 📤 Publish
-      run: dotnet publish Server/Server.csproj -c Release -o publish
+    - name: 📤 Publish Server and WebApp
+      run: |
+        dotnet publish Server/Server.csproj -c Release -o publish/Server
+        dotnet publish WebApp/WebApp.proj -c Release -o publish/WebApp
 
     - name: 🚀 Deploy to EC2 via SCP
       uses: appleboy/scp-action@v0.1.4
@@ -38,12 +42,12 @@ jobs:
         source: ./publish/
         target: /home/ec2-user/myapp/
 
-    - name: 🧨 Start .NET app on EC2
+    - name: 🧨 Start Server app on EC2
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.EC2_HOST }}
         username: ${{ secrets.EC2_USER }}
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
-          nohup dotnet /home/ec2-user/myapp/publish/Server.dll --urls http://0.0.0.0:5000 > /home/ec2-user/myapp/app.log 2>&1 &
-
+          pkill -f 'dotnet' || true
+          nohup dotnet /home/ec2-user/myapp/Server/Server.dll --urls http://0.0.0.0:5000 > /home/ec2-user/myapp/app.log 2>&1 &
