@@ -56,6 +56,5 @@ jobs:
         username: ${{ secrets.EC2_USER }}
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
-          pkill -f dotnet || true
           nohup dotnet /home/ec2-user/myapp/publish/Server/Server.dll --urls http://0.0.0.0:5000 > /home/ec2-user/myapp/app.log 2>&1 &
           nohup dotnet /home/ec2-user/myapp/publish/WebApp/WebApp.dll --urls http://0.0.0.0:5001 > /home/ec2-user/myapp/app.log 2>&1 &
