@@ -26,8 +26,20 @@ jobs:
     - name: ✅ Test
       run: dotnet test Server.Tests/Server.Tests.csproj --no-build --configuration Release --logger trx
 
-    - name: 📤 Publish
-      run: dotnet publish Server/Server.csproj -c Release -o publish
+    - name: 📤 Publish Server and WebApp
+      run: |
+        dotnet publish Server/Server.csproj -c Release -o publish/Server
+        dotnet publish WebApp/WebApp.csproj -c Release -o publish/WebApp
+
+    - name: 🧼 Cleanup target folder on EC2
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USER }}
+        key: ${{ secrets.EC2_SSH_KEY }}
+        script: |
+          rm -rf /home/ec2-user/myapp/*
+
 
     - name: 🚀 Deploy to EC2 via SCP
       uses: appleboy/scp-action@v0.1.4
@@ -38,13 +50,12 @@ jobs:
         source: ./publish/
         target: /home/ec2-user/myapp/
 
-    - name: 🧨 Start .NET app on EC2
+    - name: 🧨 Start .NET apps on EC2
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.EC2_HOST }}
         username: ${{ secrets.EC2_USER }}
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
-          pkill -f 'dotnet' || true
-          nohup dotnet /home/***/myapp/Server.dll --urls http://0.0.0.0:5000 > /home/***/myapp/app.log 2>&1 &
-
+          nohup dotnet /home/ec2-user/myapp/publish/Server/Server.dll --urls http://0.0.0.0:5000 > /home/ec2-user/myapp/app.log 2>&1 &
+          nohup dotnet /home/ec2-user/myapp/publish/WebApp/WebApp.dll --urls http://0.0.0.0:5001 > /home/ec2-user/myapp/app.log 2>&1 &
