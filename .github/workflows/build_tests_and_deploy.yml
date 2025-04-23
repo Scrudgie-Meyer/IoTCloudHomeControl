@@ -26,14 +26,12 @@ jobs:
     - name: ✅ Test
       run: dotnet test Server.Tests/Server.Tests.csproj --no-build --configuration Release --logger trx
 
-    - name: 📦 Create GitHub Deployment
-      id: deployment
-      uses: peter-evans/create-deployment@v3
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        environment: production
+    - name: 📤 Publish Server and WebApp
+      run: |
+        dotnet publish Server/Server.csproj -c Release -o publish/Server
+        dotnet publish WebApp/WebApp.csproj -c Release -o publish/WebApp
 
-    - name: 🧼 Stop .NET apps and clean EC2 target
+    - name: 🧼 Stop running .NET apps and clean folder on EC2
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.EC2_HOST }}
@@ -42,6 +40,8 @@ jobs:
         script: |
           pkill -f dotnet || true
           rm -rf /home/ec2-user/myapp/*
+
+
 
     - name: 🚀 Deploy to EC2 via SCP
       uses: appleboy/scp-action@v0.1.4
@@ -61,19 +61,3 @@ jobs:
         script: |
           nohup dotnet /home/ec2-user/myapp/publish/Server/Server.dll --urls http://0.0.0.0:5000 > /home/ec2-user/myapp/app.log 2>&1 &
           nohup dotnet /home/ec2-user/myapp/publish/WebApp/WebApp.dll --urls http://0.0.0.0:5001 > /home/ec2-user/myapp/app.log 2>&1 &
-
-    - name: ✅ Mark Deployment as Successful
-      if: success()
-      uses: peter-evans/deployment-status@v3
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        deployment_id: ${{ steps.deployment.outputs.deployment_id }}
-        state: success
-
-    - name: ❌ Mark Deployment as Failed
-      if: failure()
-      uses: peter-evans/deployment-status@v3
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        deployment_id: ${{ steps.deployment.outputs.deployment_id }}
-        state: failure
