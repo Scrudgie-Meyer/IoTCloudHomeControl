@@ -38,10 +38,11 @@ jobs:
         username: ${{ secrets.EC2_USER }}
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
-          pkill -f dotnet || true
+          echo "Killing .NET apps..."
+          ps aux | grep dotnet | awk '{print $2}' | xargs -r kill -9
+          sleep 2
+          echo "Cleaning folder..."
           rm -rf /home/ec2-user/myapp/*
-
-
 
     - name: 🚀 Deploy to EC2 via SCP
       uses: appleboy/scp-action@v0.1.4
