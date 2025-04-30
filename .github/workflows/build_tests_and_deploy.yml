@@ -31,7 +31,7 @@ jobs:
         dotnet publish Server/Server.csproj -c Release -o publish/Server
         dotnet publish WebApp/WebApp.csproj -c Release -o publish/WebApp
 
-    - name: 🧼 Cleanup target folder on EC2
+    - name: 🧼 Stop running .NET apps and clean folder on EC2
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.EC2_HOST }}
@@ -39,7 +39,6 @@ jobs:
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
           rm -rf /home/ec2-user/myapp/*
-
 
     - name: 🚀 Deploy to EC2 via SCP
       uses: appleboy/scp-action@v0.1.4
