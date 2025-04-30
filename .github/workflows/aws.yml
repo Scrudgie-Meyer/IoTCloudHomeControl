@@ -1,0 +1,12 @@
+name: Dummy Deploy
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  dummy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Return true
+        run: echo "true"
