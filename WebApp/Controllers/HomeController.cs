@@ -15,9 +15,17 @@ namespace WebApp.Controllers
             _httpClient = httpClient;
         }
 
+        public IActionResult SetPreferences(string lang = "uk-UA", string timezone = "Europe/Kyiv")
+        {
+            HttpContext.Session.SetString("Language", lang);
+            HttpContext.Session.SetString("TimeZone", timezone);
+
+            return RedirectToAction("Index");
+        }
+
         public async Task<IActionResult> Index()
         {
-            string apiUrl = "https://localhost:7261/api/user/1";
+            string apiUrl = "http://localhost:5000/api/user/1";
             string userName;
 
             try
@@ -32,7 +40,12 @@ namespace WebApp.Controllers
                 userName = "Error fetching user";
             }
 
-            ViewBag.UserName = userName;
+            var lang = HttpContext.Session.GetString("Language") ?? "не задано";
+            var tz = HttpContext.Session.GetString("TimeZone") ?? "не задано";
+
+            ViewBag.Language = lang;
+            ViewBag.TimeZone = tz;
+
             return View();
         }
 
