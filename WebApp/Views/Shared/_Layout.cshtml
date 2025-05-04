@@ -1,12 +1,13 @@
 ﻿@{
-    var lang = Context.Session.GetString("Language") ?? "uk-UA";
+    @using System.Globalization
+    @inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 }
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - IOT Cloud Control</title>
+    <title>@ViewData["Title"] - @Localizer["AppTitle"]</title>
     <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="/IOT Cloud Control.styles.css" asp-append-version="true" />
@@ -14,14 +15,14 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="shortcut icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <meta name="apple-mobile-web-app-title" content="IOT Cloud Control" />
+    <meta name="apple-mobile-web-app-title" content="@Localizer["AppTitle"]" />
     <link rel="manifest" href="/site.webmanifest" />
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">IOT Cloud Control</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">@Localizer["AppTitle"]</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -29,26 +30,26 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">@Localizer["Home"]</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">@Localizer["Privacy"]</a>
                         </li>
                     </ul>
                     <div class="d-flex align-items-center">
-                        <form asp-controller="Home" asp-action="SetPreferences" method="get" class="d-inline">
-                            <select name="lang" onchange="this.form.submit()" class="form-select form-select-sm w-auto d-inline me-2">
-                                <option value="uk-UA" selected="@(lang == "uk-UA")">🇺🇦 Українська</option>
-                                <option value="en-US" selected="@(lang == "en-US")">🇬🇧 English</option>
+                        <form id="langForm" method="post" asp-controller="Home" asp-action="SetLanguage" class="d-inline">
+                            <select name="culture" onchange="document.getElementById('langForm').submit()" class="form-select form-select-sm w-auto d-inline me-2">
+                                <option value="uk-UA" selected="@(CultureInfo.CurrentCulture.Name == "uk-UA")">@Localizer["LanguageUkrainian"]</option>
+                                <option value="en-US" selected="@(CultureInfo.CurrentCulture.Name == "en-US")">@Localizer["LanguageEnglish"]</option>
                             </select>
-                            <input type="hidden" name="timezone" value="Europe/Kyiv" />
                         </form>
+
                         <a class="nav-link text-dark d-flex align-items-center" asp-area="" asp-controller="Authorization" asp-action="Login">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-in-right me-1" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd" d="M6 3.5a.5.5 0 0 1 .5.5v2.5H13a.5.5 0 0 1 0 1H6.5V11a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5z" />
                                 <path fill-rule="evenodd" d="M10.854 8.354a.5.5 0 0 1-.708 0L8.5 6.707V9.5a.5.5 0 0 1-1 0V6.707l-1.646 1.647a.5.5 0 0 1-.708-.708l2.5-2.5a.5.5 0 0 1 .708 0l2.5 2.5a.5.5 0 0 1 0 .708z" />
                             </svg>
-                            Login
+                            @Localizer["Login"]
                         </a>
                     </div>
                 </div>
@@ -63,9 +64,10 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2025 - IOT Cloud Control - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2025 - @Localizer["AppTitle"] - <a asp-area="" asp-controller="Home" asp-action="Privacy">@Localizer["Privacy"]</a>
         </div>
     </footer>
+
     <script src="/lib/jquery/dist/jquery.min.js"></script>
     <script src="/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/js/site.js" asp-append-version="true"></script>

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using WebApp.Models;
@@ -15,13 +16,19 @@ namespace WebApp.Controllers
             _httpClient = httpClient;
         }
 
-        public IActionResult SetPreferences(string lang = "uk-UA", string timezone = "Europe/Kyiv")
+        [HttpPost]
+        public IActionResult SetLanguage(string culture, string returnUrl = "/")
         {
-            HttpContext.Session.SetString("Language", lang);
-            HttpContext.Session.SetString("TimeZone", timezone);
+            Response.Cookies.Append(
+                CookieRequestCultureProvider.DefaultCookieName,
+                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
+                new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
+            );
 
-            return RedirectToAction("Index");
+            return LocalRedirect(returnUrl);
         }
+
+
 
         public async Task<IActionResult> Index()
         {
