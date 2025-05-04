@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.Options;
@@ -5,12 +6,12 @@ using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Localization, Views, Session, etc.
 builder.Services.AddControllersWithViews()
     .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
     .AddDataAnnotationsLocalization();
 
 builder.Services.AddHttpClient();
-
 
 builder.Services.AddSession(options =>
 {
@@ -19,6 +20,17 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+// ?? Add Cookie Authentication
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Authorization/Login";
+        options.LogoutPath = "/Authorization/Logout";
+        options.ExpireTimeSpan = TimeSpan.FromHours(1);
+        options.SlidingExpiration = true; // автооновлення cookie при активності
+    });
+
+// ?? Localization
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
 builder.Services.Configure<RequestLocalizationOptions>(options =>
@@ -36,12 +48,11 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
     options.RequestCultureProviders.Insert(0, new CookieRequestCultureProvider());
 });
 
-
 var app = builder.Build();
 
+// ?? Use Localization
 var localizationOptions = app.Services.GetService<IOptions<RequestLocalizationOptions>>();
 app.UseRequestLocalization(localizationOptions.Value);
-
 
 if (!app.Environment.IsDevelopment())
 {
@@ -56,6 +67,8 @@ app.UseRouting();
 
 app.UseSession();
 
+// ?? Authentication must come before Authorization
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

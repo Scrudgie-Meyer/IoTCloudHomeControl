@@ -1,7 +1,6 @@
-﻿@{
-    @using System.Globalization
-    @inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
-}
+﻿@using System.Globalization
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,7 +17,7 @@
     <meta name="apple-mobile-web-app-title" content="@Localizer["AppTitle"]" />
     <link rel="manifest" href="/site.webmanifest" />
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
@@ -45,10 +44,6 @@
                         </form>
 
                         <a class="nav-link text-dark d-flex align-items-center" asp-area="" asp-controller="Authorization" asp-action="Login">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-in-right me-1" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M6 3.5a.5.5 0 0 1 .5.5v2.5H13a.5.5 0 0 1 0 1H6.5V11a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5z" />
-                                <path fill-rule="evenodd" d="M10.854 8.354a.5.5 0 0 1-.708 0L8.5 6.707V9.5a.5.5 0 0 1-1 0V6.707l-1.646 1.647a.5.5 0 0 1-.708-.708l2.5-2.5a.5.5 0 0 1 .708 0l2.5 2.5a.5.5 0 0 1 0 .708z" />
-                            </svg>
                             @Localizer["Login"]
                         </a>
                     </div>
@@ -56,13 +51,14 @@
             </div>
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="border-top footer text-muted mt-auto">
         <div class="container">
             &copy; 2025 - @Localizer["AppTitle"] - <a asp-area="" asp-controller="Home" asp-action="Privacy">@Localizer["Privacy"]</a>
         </div>

@@ -19,5 +19,20 @@ namespace Server.Data.Entities
 
         [Required]
         public string PasswordHash { get; set; }
+
+        public bool IsAdmin { get; set; } = false;
+
+        public bool IsEmailConfirmed { get; set; } = false;
+        public bool Hidden { get; set; } = false;
+
+        public User(string username, string email, string passwordHash)
+        {
+            Username = username;
+            Email = email;
+            PasswordHash = passwordHash;
+            IsAdmin = false;
+            IsEmailConfirmed = false;
+            Hidden = false;
+        }
     }
 }
