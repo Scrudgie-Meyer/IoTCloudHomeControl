@@ -18,6 +18,8 @@
         <input asp-for="Password" class="form-control" type="password" />
         <span asp-validation-for="Password" class="text-danger"></span>
     </div>
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
     <div class="form-check mb-3">
         <input asp-for="RememberMe" class="form-check-input" />
         <label asp-for="RememberMe" class="form-check-label">@Localizer["RememberMe"]</label>

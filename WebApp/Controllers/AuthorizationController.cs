@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
@@ -21,7 +22,10 @@ namespace WebApp.Controllers
         }
 
         public IActionResult Register() => View();
+
         public IActionResult Login() => View();
+
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -57,16 +61,16 @@ namespace WebApp.Controllers
             {
                 string message = response.StatusCode switch
                 {
-                    System.Net.HttpStatusCode.Forbidden => "Email not confirmed.",
-                    System.Net.HttpStatusCode.Unauthorized => "Invalid credentials.",
+                    HttpStatusCode.Forbidden => "Email not confirmed.",
+                    HttpStatusCode.Unauthorized => "Invalid credentials.",
                     _ => "Login failed."
                 };
-                ModelState.AddModelError(string.Empty, message);
-                return View(model);
+
+                return RedirectToAction("Login", new { error = message });
             }
 
             var responseBody = await response.Content.ReadAsStringAsync();
-            var user = JsonSerializer.Deserialize<UserDto>(responseBody, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            var user = JsonSerializer.Deserialize<UserDto>(responseBody, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? throw new InvalidOperationException("Failed to deserialize the user from the response.");
 
             // Створення claims
             var claims = new List<Claim>
@@ -133,8 +137,8 @@ namespace WebApp.Controllers
     public class UserDto
     {
         public int Id { get; set; }
-        public string Username { get; set; }
-        public string Email { get; set; }
+        public required string Username { get; set; }
+        public required string Email { get; set; }
         public bool IsAdmin { get; set; }
     }
 

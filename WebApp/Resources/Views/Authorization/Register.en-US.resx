@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="RegisterButton" xml:space="preserve">
-    <value>Register</value>
+    <value>Registration</value>
   </data>
-  <data name="LoginTitle" xml:space="preserve">
-    <value>Login</value>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>Password confirmation</value>
   </data>
   <data name="Email" xml:space="preserve">
     <value>Email</value>
@@ -129,10 +129,10 @@
   <data name="Password" xml:space="preserve">
     <value>Password</value>
   </data>
-  <data name="RememberMe" xml:space="preserve">
-    <value>Remember Me</value>
+  <data name="Username" xml:space="preserve">
+    <value>User Name</value>
   </data>
-  <data name="LoginButton" xml:space="preserve">
-    <value>Sign In</value>
+  <data name="RegisterTitle" xml:space="preserve">
+    <value>Registration</value>
   </data>
 </root>

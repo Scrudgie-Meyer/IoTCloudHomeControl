@@ -5,7 +5,7 @@ namespace WebApp.Validators
 {
     public class PasswordComplexityAttribute : ValidationAttribute
     {
-        public override bool IsValid(object value)
+        public override bool IsValid(object? value)
         {
             var password = value as string;
 
