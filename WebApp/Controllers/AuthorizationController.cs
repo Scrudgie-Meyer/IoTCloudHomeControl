@@ -50,7 +50,7 @@ namespace WebApp.Controllers
                 "application/json"
             );
 
-            var apiUrl = _configuration["ApiBaseUrl"] + "/api/User/authenticate";
+            var apiUrl = "/api/User/authenticate";
             var response = await _httpClient.PostAsync(apiUrl, content);
 
             if (!response.IsSuccessStatusCode)
@@ -116,7 +116,7 @@ namespace WebApp.Controllers
                 "application/json"
             );
 
-            var apiUrl = _configuration["ApiBaseUrl"] + "/api/user";
+            var apiUrl = "/api/user";
             var response = await _httpClient.PostAsync(apiUrl, content);
 
             if (response.IsSuccessStatusCode)

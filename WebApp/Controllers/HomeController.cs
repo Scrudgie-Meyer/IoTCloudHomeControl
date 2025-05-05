@@ -29,32 +29,7 @@ namespace WebApp.Controllers
         }
 
 
-
-        public async Task<IActionResult> Index()
-        {
-            string apiUrl = "http://localhost:5000/api/user/1";
-            string userName;
-
-            try
-            {
-                var response = await _httpClient.GetAsync(apiUrl);
-                response.EnsureSuccessStatusCode();
-                userName = await response.Content.ReadAsStringAsync();
-            }
-            catch (HttpRequestException ex)
-            {
-                _logger.LogError("Failed to fetch user: {Message}", ex.Message);
-                userName = "Error fetching user";
-            }
-
-            var lang = HttpContext.Session.GetString("Language") ?? "не задано";
-            var tz = HttpContext.Session.GetString("TimeZone") ?? "не задано";
-
-            ViewBag.Language = lang;
-            ViewBag.TimeZone = tz;
-
-            return View();
-        }
+        public IActionResult Index() => View();
 
         public IActionResult Privacy() => View();
 
