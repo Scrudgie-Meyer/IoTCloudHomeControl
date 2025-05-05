@@ -91,7 +91,7 @@ namespace WebApp.Controllers
                 authProperties
             );
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("ManagePanel", "User");
         }
 
         [HttpPost]

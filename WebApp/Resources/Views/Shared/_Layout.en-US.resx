@@ -135,4 +135,10 @@
   <data name="Privacy" xml:space="preserve">
     <value>Privacy</value>
   </data>
+  <data name="AdminPanel" xml:space="preserve">
+    <value>Manage</value>
+  </data>
+  <data name="ManagementPanel" xml:space="preserve">
+    <value>Manage</value>
+  </data>
 </root>
