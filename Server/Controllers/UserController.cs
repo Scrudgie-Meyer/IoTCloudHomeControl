@@ -105,8 +105,8 @@ namespace Server.Controllers
             if (user == null)
                 return Unauthorized("Invalid credentials.");
 
-            if (!user.IsEmailConfirmed)
-                return Forbid("Email not confirmed.");
+            //if (!user.IsEmailConfirmed)
+            //    return Forbid("Email not confirmed.");
 
             var hasher = new PasswordHasher<User>();
             var verificationResult = hasher.VerifyHashedPassword(user, user.PasswordHash, login.Password);
