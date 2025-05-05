@@ -133,6 +133,6 @@
     <value>Запам’ятати мене</value>
   </data>
   <data name="LoginButton" xml:space="preserve">
-    <value>Пароль</value>
+    <value>Увійти</value>
   </data>
 </root>
