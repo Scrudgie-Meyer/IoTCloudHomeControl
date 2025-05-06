@@ -4,10 +4,10 @@
     {
         public int Id { get; set; }
         public int DeviceId { get; set; }
-        public string EventType { get; set; }
-        public string Description { get; set; }
+        public required string EventType { get; set; }
+        public string? Description { get; set; }
         public DateTime Timestamp { get; set; } = DateTime.UtcNow;
 
-        public Device Device { get; set; }
+        public required Device Device { get; set; }
     }
 }

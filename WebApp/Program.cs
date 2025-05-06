@@ -50,8 +50,9 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
 var app = builder.Build();
 
 // ?? Use Localization
-var localizationOptions = app.Services.GetService<IOptions<RequestLocalizationOptions>>();
+var localizationOptions = app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>();
 app.UseRequestLocalization(localizationOptions.Value);
+
 
 if (!app.Environment.IsDevelopment())
 {
