@@ -36,6 +36,12 @@
                                     @(role == "Admin" ? Localizer["AdminPanel"] : Localizer["ManagementPanel"])
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="User" asp-action="Instruction">@Localizer["Instruction"]</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="User" asp-action="EventCreator">@Localizer["EventCreator"]</a>
+                            </li>
                         }
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-controller="Home" asp-action="Privacy">@Localizer["Privacy"]</a>

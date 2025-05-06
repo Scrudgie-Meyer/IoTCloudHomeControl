@@ -18,5 +18,7 @@ namespace WebApp.Controllers
         }
 
         public IActionResult ManagePanel() => View();
+        public IActionResult Instruction() => View();
+        public IActionResult EventCreator() => View();
     }
 }
