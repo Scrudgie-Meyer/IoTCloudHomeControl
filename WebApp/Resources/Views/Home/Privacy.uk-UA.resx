@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<data name="Title" xml:space="preserve">
+    <value>Політика конфіденційності</value>
+  </data>
+	<data name="Intro" xml:space="preserve">
+    <value>Ця політика конфіденційності описує, як збирається, використовується та передається ваша особиста інформація при використанні системи IoTCloudHomeControl.</value>
+  </data>
+	<data name="Section1Title" xml:space="preserve">
+    <value>1. Яку інформацію ми збираємо</value>
+  </data>
+	<data name="Section1Body" xml:space="preserve">
+    <value>Ми можемо збирати дані, пов’язані з пристроями: ідентифікатори, показники сенсорів, керуючі дії. Ці дані зберігаються у Firebase для забезпечення дистанційного керування.</value>
+  </data>
+	<data name="Section2Title" xml:space="preserve">
+    <value>2. Як ми використовуємо вашу інформацію</value>
+  </data>
+	<data name="Section2Body" xml:space="preserve">
+    <value>Ми використовуємо дані для роботи розумних пристроїв, надання зворотного зв’язку в реальному часі та поліпшення системи. Ми не продаємо та не передаємо дані третім сторонам.</value>
+  </data>
+	<data name="Section3Title" xml:space="preserve">
+    <value>3. Захист даних</value>
+  </data>
+	<data name="Section3Body" xml:space="preserve">
+    <value>Ми використовуємо розумні заходи захисту, включаючи автентифікацію через Firebase, для безпеки ваших даних.</value>
+  </data>
+	<data name="Section4Title" xml:space="preserve">
+    <value>4. Сторонні сервіси</value>
+  </data>
+	<data name="Section4Body" xml:space="preserve">
+    <value>Ми використовуємо Firebase від Google. Перегляньте їхню політику конфіденційності: https://firebase.google.com/support/privacy</value>
+  </data>
+	<data name="Section5Title" xml:space="preserve">
+    <value>5. Зміни</value>
+  </data>
+	<data name="Section5Body" xml:space="preserve">
+    <value>Ця політика може змінюватися. Усі оновлення публікуватимуться на цій сторінці з новою датою.</value>
+  </data>
+	<data name="Section6Title" xml:space="preserve">
+    <value>6. Зв'язок з нами</value>
+  </data>
+	<data name="Section6Body" xml:space="preserve">
+    <value>З питань звертайтесь: wofer151@gmail.com</value>
+  </data>
+</root>
