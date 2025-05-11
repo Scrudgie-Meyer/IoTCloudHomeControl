@@ -3,7 +3,7 @@ using Server.Data.DBManager;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = Environment.GetEnvironmentVariable("POSTGRES_CONNECTION_STRING");
+var connectionString = "Host=iotcloudhomecontrol.cly2e42068ya.eu-north-1.rds.amazonaws.com;Port=5432;Database=IOTDB;Username=postgres;Password=w7cpguM4yJ5y2Mq";
 
 builder.Services.AddDbContext<DBSetup>(options =>
     options.UseNpgsql(connectionString));

@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<data name="Title" xml:space="preserve">
+    <value>Privacy Policy</value>
+  </data>
+	<data name="Intro" xml:space="preserve">
+    <value>This Privacy Policy describes how your personal information is collected, used, and shared when you use our IoTCloudHomeControl system.</value>
+  </data>
+	<data name="Section1Title" xml:space="preserve">
+    <value>1. Information We Collect</value>
+  </data>
+	<data name="Section1Body" xml:space="preserve">
+    <value>We may collect device-related data such as device identifiers, sensor readings, and control actions. This data is stored in a Firebase Realtime Database to support remote control and monitoring.</value>
+  </data>
+	<data name="Section2Title" xml:space="preserve">
+    <value>2. How We Use Your Information</value>
+  </data>
+	<data name="Section2Body" xml:space="preserve">
+    <value>We use your data to operate smart home devices, provide real-time feedback, and improve system performance. We do not sell or share your data.</value>
+  </data>
+	<data name="Section3Title" xml:space="preserve">
+    <value>3. Data Security</value>
+  </data>
+	<data name="Section3Body" xml:space="preserve">
+    <value>We apply reasonable security measures including Firebase authentication to protect your data.</value>
+  </data>
+	<data name="Section4Title" xml:space="preserve">
+    <value>4. Third-Party Services</value>
+  </data>
+	<data name="Section4Body" xml:space="preserve">
+    <value>We use Firebase by Google. Review their privacy policy at https://firebase.google.com/support/privacy</value>
+  </data>
+	<data name="Section5Title" xml:space="preserve">
+    <value>5. Changes</value>
+  </data>
+	<data name="Section5Body" xml:space="preserve">
+    <value>This policy may be updated. Any changes will be posted here with a new date.</value>
+  </data>
+	<data name="Section6Title" xml:space="preserve">
+    <value>6. Contact Us</value>
+  </data>
+	<data name="Section6Body" xml:space="preserve">
+    <value>For questions, contact: wofer151@gmail.com</value>
+  </data>
+</root>

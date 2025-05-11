@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<data name="PageTitle" xml:space="preserve">
+    <value>Instruction</value>
+  </data>
+	<data name="DownloadApp" xml:space="preserve">
+    <value>Download Android App (.apk)</value>
+  </data>
+	<data name="InstallationInstructionsTitle" xml:space="preserve">
+    <value>Installation Instructions for Android App</value>
+  </data>
+	<data name="Step1" xml:space="preserve">
+    <value>Click on the "Download Android App (.apk)" link.</value>
+  </data>
+	<data name="Step2" xml:space="preserve">
+    <value>Confirm the download if prompted by your browser.</value>
+  </data>
+	<data name="Step3" xml:space="preserve">
+    <value>Once the download is complete, open the .apk file.</value>
+  </data>
+	<data name="Step4" xml:space="preserve">
+    <value>If a warning appears, allow installation from unknown sources in settings.</value>
+  </data>
+	<data name="Step5" xml:space="preserve">
+    <value>Tap "Install" to proceed with the installation.</value>
+  </data>
+	<data name="Step6" xml:space="preserve">
+    <value>After installation is complete, open the app.</value>
+  </data>
+</root>

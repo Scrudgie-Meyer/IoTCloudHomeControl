@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<data name="PageTitle" xml:space="preserve">
+    <value>Інструкція</value>
+  </data>
+	<data name="DownloadApp" xml:space="preserve">
+    <value>Завантажити Android-додаток (.apk)</value>
+  </data>
+	<data name="InstallationInstructionsTitle" xml:space="preserve">
+    <value>Інструкція з встановлення Android-додатку</value>
+  </data>
+	<data name="Step1" xml:space="preserve">
+    <value>Натисніть кнопку "Завантажити Android-додаток (.apk)".</value>
+  </data>
+	<data name="Step2" xml:space="preserve">
+    <value>Підтвердіть завантаження файлу, якщо браузер попросить.</value>
+  </data>
+	<data name="Step3" xml:space="preserve">
+    <value>Після завершення завантаження відкрийте файл .apk.</value>
+  </data>
+	<data name="Step4" xml:space="preserve">
+    <value>У разі попередження дозвольте встановлення з невідомих джерел у налаштуваннях.</value>
+  </data>
+	<data name="Step5" xml:space="preserve">
+    <value>Натисніть "Встановити", щоб продовжити встановлення.</value>
+  </data>
+	<data name="Step6" xml:space="preserve">
+    <value>Після завершення встановлення відкрийте додаток.</value>
+  </data>
+</root>

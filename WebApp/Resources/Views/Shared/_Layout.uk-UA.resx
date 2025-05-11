@@ -141,4 +141,13 @@
   <data name="ManagementPanel" xml:space="preserve">
     <value>Управління</value>
   </data>
+  <data name="Instruction" xml:space="preserve">
+    <value>Інструкція</value>
+  </data>
+  <data name="EventCreator" xml:space="preserve">
+    <value>Створити сценарій</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Вийти</value>
+  </data>
 </root>

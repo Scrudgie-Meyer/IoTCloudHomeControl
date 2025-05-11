@@ -141,4 +141,13 @@
   <data name="ManagementPanel" xml:space="preserve">
     <value>Manage</value>
   </data>
+  <data name="Instruction" xml:space="preserve">
+    <value>Instruction</value>
+  </data>
+  <data name="EventCreator" xml:space="preserve">
+    <value>Create scenario</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Logout</value>
+  </data>
 </root>

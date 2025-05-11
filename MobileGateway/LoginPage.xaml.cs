@@ -1,11 +1,11 @@
-using System.Text;
+п»їusing System.Text;
 using System.Text.Json;
 
 namespace MobileGateway;
 
 public partial class LoginPage : ContentPage
 {
-    // HttpClient з обхідником перевірки сертифікатів
+    // HttpClient Р· РѕР±С…РѕРґРѕРј РїРµСЂРµРІС–СЂРєРё СЃРµСЂС‚РёС„С–РєР°С‚С–РІ
     private static readonly HttpClient _httpClient = new(
         new HttpClientHandler
         {
@@ -26,9 +26,9 @@ public partial class LoginPage : ContentPage
         var email = usernameEntry.Text?.Trim();
         var password = passwordEntry.Text;
 
-        if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+        if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
         {
-            errorLabel.Text = "Заповніть логін і пароль.";
+            errorLabel.Text = "Р‘СѓРґСЊ Р»Р°СЃРєР°, Р·Р°РїРѕРІРЅС–С‚СЊ Р»РѕРіС–РЅ С– РїР°СЂРѕР»СЊ.";
             errorLabel.IsVisible = true;
             return;
         }
@@ -52,9 +52,9 @@ public partial class LoginPage : ContentPage
             {
                 string message = response.StatusCode switch
                 {
-                    System.Net.HttpStatusCode.Forbidden => "Пошта не підтверджена.",
-                    System.Net.HttpStatusCode.Unauthorized => "Невірні дані.",
-                    _ => "Помилка входу."
+                    System.Net.HttpStatusCode.Forbidden => "РџРѕС€С‚Р° РЅРµ РїС–РґС‚РІРµСЂРґР¶РµРЅР°.",
+                    System.Net.HttpStatusCode.Unauthorized => "РќРµРІС–СЂРЅС– Р»РѕРіС–РЅ Р°Р±Рѕ РїР°СЂРѕР»СЊ.",
+                    _ => "РџРѕРјРёР»РєР° РІС…РѕРґСѓ. РЎРїСЂРѕР±СѓР№С‚Рµ РїС–Р·РЅС–С€Рµ."
                 };
 
                 errorLabel.Text = message;
@@ -70,20 +70,20 @@ public partial class LoginPage : ContentPage
 
             if (user == null)
             {
-                errorLabel.Text = "Неможливо зчитати відповідь.";
+                errorLabel.Text = "РќРµРјРѕР¶Р»РёРІРѕ РїСЂРѕС‡РёС‚Р°С‚Рё РІС–РґРїРѕРІС–РґСЊ СЃРµСЂРІРµСЂР°.";
                 errorLabel.IsVisible = true;
                 return;
             }
 
-            // TODO: Зберегти токен, якщо потрібно
-            await DisplayAlert("Успіх", $"Вітаю, {user.Username}!", "OK");
+            // TODO: Р—Р±РµСЂРµРіС‚Рё С‚РѕРєРµРЅ, СЏРєС‰Рѕ РїРѕС‚СЂС–Р±РЅРѕ
+            await DisplayAlert("РЈСЃРїС–С…", $"Р’С–С‚Р°СЋ, {user.Username}!", "OK");
 
-            // Переходь на головну сторінку
+            // РџРµСЂРµС…С–Рґ РЅР° РіРѕР»РѕРІРЅСѓ СЃС‚РѕСЂС–РЅРєСѓ
             Application.Current.MainPage = new MainPage();
         }
         catch (Exception ex)
         {
-            errorLabel.Text = "Помилка з'єднання з сервером.";
+            errorLabel.Text = "РџРѕРјРёР»РєР° Р·'С”РґРЅР°РЅРЅСЏ Р· СЃРµСЂРІРµСЂРѕРј.";
             errorLabel.IsVisible = true;
         }
     }

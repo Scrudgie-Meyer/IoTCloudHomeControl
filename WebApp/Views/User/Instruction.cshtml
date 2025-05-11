@@ -5,12 +5,20 @@
 @inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 
 <div class="container py-5">
-    <h2>@Localizer["LoggedInMessage"]</h2>
+    <h2>@Localizer["InstallationInstructionsTitle"]</h2>
 
     <p>
         <a href="https://drive.google.com/uc?export=download&id=1W9eAN7abjnFmx1kyLrmERZn-nR9-x1UH" download>
-            Завантажити Android-додаток (.apk)
+            @Localizer["DownloadApp"]
         </a>
-
     </p>
+
+    <ol>
+        <li>@Localizer["Step1"]</li>
+        <li>@Localizer["Step2"]</li>
+        <li>@Localizer["Step3"]</li>
+        <li>@Localizer["Step4"]</li>
+        <li>@Localizer["Step5"]</li>
+        <li>@Localizer["Step6"]</li>
+    </ol>
 </div>
