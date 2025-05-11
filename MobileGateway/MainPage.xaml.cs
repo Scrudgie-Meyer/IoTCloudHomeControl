@@ -1,75 +1,104 @@
-﻿using Plugin.BLE;
-using Plugin.BLE.Abstractions.Contracts;
-using Plugin.BLE.Abstractions.EventArgs;
+﻿#if ANDROID
+using Android.Bluetooth;
+using Android.Content;
+using MobileGateway.Platforms.Android.Services;
+using Application = Android.App.Application;
+#endif
 
 namespace MobileGateway;
 
 public partial class MainPage : ContentPage
 {
-    private readonly IBluetoothLE _bluetoothLE;
-    private readonly IAdapter _adapter;
-    private readonly List<IDevice> _deviceList = new();
+    public class BluetoothDeviceModel
+    {
+        public string? Name { get; set; }
+        public required string Id { get; set; }
+    }
+
+    private List<BluetoothDeviceModel> _classicDevices = new();
+
+#if ANDROID
+    private BluetoothAdapter? _adapter;
+    private List<BluetoothDeviceModel> _bondedDevices = new();
+    private List<BluetoothDeviceModel> _connectedDevices = new();
+#endif
 
     public MainPage()
     {
         InitializeComponent();
 
-        _bluetoothLE = CrossBluetoothLE.Current;
-        _adapter = CrossBluetoothLE.Current.Adapter;
-        _adapter.DeviceDiscovered += OnDeviceDiscovered;
+        var username = Preferences.Get("Username", null);
+        if (!string.IsNullOrEmpty(username))
+        {
+            welcomeLabel.Text = $"Привіт, {username}!";
+        }
     }
+
+    private void OnLogoutClicked(object sender, EventArgs e)
+    {
+        Preferences.Remove("UserToken");
+        Preferences.Remove("Username");
+
+        Microsoft.Maui.Controls.Application.Current.MainPage = new LoginPage();
+    }
+
 
     private async void OnScanClicked(object sender, EventArgs e)
     {
-        _deviceList.Clear();
-        devicesView.ItemsSource = null;
+#if ANDROID
+        var context = Application.Context;
 
-        // Перевіряємо дозволи для Bluetooth та Location (для Android)
-        var status = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
-        if (status != PermissionStatus.Granted)
+        if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.S)
         {
-            status = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
-            if (status != PermissionStatus.Granted)
+            var permission = Android.Content.PM.Permission.Granted;
+            if (AndroidX.Core.Content.ContextCompat.CheckSelfPermission(context, Android.Manifest.Permission.BluetoothScan) != permission ||
+                AndroidX.Core.Content.ContextCompat.CheckSelfPermission(context, Android.Manifest.Permission.BluetoothConnect) != permission)
             {
-                await DisplayAlert("Permissions", "Bluetooth permissions are required.", "OK");
+                var activity = Platform.CurrentActivity;
+                AndroidX.Core.App.ActivityCompat.RequestPermissions(activity, new[] {
+                    Android.Manifest.Permission.BluetoothScan,
+                    Android.Manifest.Permission.BluetoothConnect
+                }, 1001);
+                statusLabel.Text = "Очікування дозволу на Bluetooth...";
                 return;
             }
         }
 
-        if (!_bluetoothLE.IsAvailable)
+        _adapter = BluetoothAdapter.DefaultAdapter;
+        if (_adapter == null)
         {
             await DisplayAlert("Bluetooth", "Bluetooth недоступний на цьому пристрої.", "OK");
             return;
         }
 
-        if (!_bluetoothLE.IsOn)
+        if (!_adapter.IsEnabled)
         {
-            await DisplayAlert("Bluetooth", "Увімкніть Bluetooth.", "OK");
+            await DisplayAlert("Bluetooth", "Увімкніть Bluetooth для пошуку пристроїв.", "OK");
             return;
         }
 
-        statusLabel.Text = "Пошук пристроїв...";
-        try
-        {
-            await _adapter.StartScanningForDevicesAsync();
-        }
-        catch (Exception ex)
-        {
-            await DisplayAlert("Помилка", ex.Message, "OK");
-        }
-        finally
-        {
-            statusLabel.Text = "Сканування завершено.";
-            devicesView.ItemsSource = _deviceList;
-        }
-    }
+        _bondedDevices.Clear();
+        _connectedDevices.Clear();
+        bondedDevicesView.ItemsSource = null;
+        connectedDevicesView.ItemsSource = null;
 
-    private void OnDeviceDiscovered(object sender, DeviceEventArgs args)
-    {
+        // Зв'язані пристрої
+        _bondedDevices.AddRange(
+            from device in _adapter.BondedDevices
+            select new BluetoothDeviceModel
+            {
+                Name = string.IsNullOrEmpty(device.Name) ? "Невідомий" : device.Name,
+                Id = device.Address
+            });
+        bondedDevicesView.ItemsSource = _bondedDevices;
 
-        if (!_deviceList.Any(d => d.Id == args.Device.Id))
-        {
-            _deviceList.Add(args.Device);
-        }
+        // Підключення до A2DP профілю через Proxy
+        _adapter.GetProfileProxy(context, new A2dpServiceListener(connectedDevicesView, statusLabel), ProfileType.A2dp);
+
+        statusLabel.Text = $"Зв'язано: {_bondedDevices.Count} (очікуємо A2DP...)";
+
+#else
+        await DisplayAlert("Bluetooth", "Bluetooth доступний лише на Android.", "OK");
+#endif
     }
 }

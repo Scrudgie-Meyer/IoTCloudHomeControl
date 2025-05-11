@@ -4,20 +4,48 @@
              x:Class="MobileGateway.MainPage"
              Title="Bluetooth Devices">
 
-    <VerticalStackLayout Padding="20" Spacing="15">
-        <Button Text="Пошук пристроїв" Clicked="OnScanClicked" />
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
 
-        <Label x:Name="statusLabel" TextColor="Gray" FontSize="14" />
+            <Grid Padding="10" VerticalOptions="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
 
-        <CollectionView x:Name="devicesView">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Grid Padding="10" ColumnDefinitions="*,Auto">
-                        <Label Text="{Binding Name}" FontAttributes="Bold" />
-                        <Label Text="{Binding Id}" Grid.Column="1" TextColor="Gray" FontSize="12"/>
-                    </Grid>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-    </VerticalStackLayout>
+                <Label x:Name="welcomeLabel" FontSize="16" VerticalOptions="Center" Grid.Column="0"/>
+                <Button Text="Вийти" Clicked="OnLogoutClicked" BackgroundColor="White" TextColor="Blue" FontAttributes="Bold" Padding="10,5" VerticalOptions="Center" Grid.Column="1"/>
+            </Grid>
+
+
+
+            <Button Text="Пошук пристроїв" Clicked="OnScanClicked" />
+
+            <Label x:Name="statusLabel" TextColor="Gray" FontSize="14" />
+
+            <Label Text="Підключені аудіопристрої (A2DP):" FontAttributes="Bold" FontSize="16" />
+            <CollectionView x:Name="connectedDevicesView">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="10" ColumnDefinitions="*,Auto">
+                            <Label Text="{Binding Name}" FontAttributes="Bold" />
+                            <Label Text="{Binding Id}" Grid.Column="1" TextColor="Gray" FontSize="12"/>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <Label Text="Зв'язані пристрої:" FontAttributes="Bold" FontSize="16" />
+            <CollectionView x:Name="bondedDevicesView">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="10" ColumnDefinitions="*,Auto">
+                            <Label Text="{Binding Name}" FontAttributes="Bold" />
+                            <Label Text="{Binding Id}" Grid.Column="1" TextColor="Gray" FontSize="12"/>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>
