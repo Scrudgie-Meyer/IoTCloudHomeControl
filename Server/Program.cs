@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Server.Data.DBManager;
+using Server.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,8 @@ builder.Services.AddDbContext<DBSetup>(options =>
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHostedService<ScheduledEventService>();
+
 
 
 var app = builder.Build();

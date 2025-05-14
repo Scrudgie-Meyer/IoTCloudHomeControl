@@ -5,14 +5,14 @@ namespace MobileGateway
 {
     public partial class LoginPage : ContentPage
     {
-        // HttpClient з обходом перевірки сертифікатів
         private static readonly HttpClient _httpClient = new(
             new HttpClientHandler
             {
-                ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => true
+                ServerCertificateCustomValidationCallback = (_, _, _, _) => true
             });
 
-        private const string ApiUrl = "https://ec2-51-21-255-211.eu-north-1.compute.amazonaws.com/server/api/User/authenticate";
+        private const string ApiBase = "https://ec2-51-21-255-211.eu-north-1.compute.amazonaws.com/server/api";
+        private static readonly JsonSerializerOptions JsonOptions = new() { PropertyNameCaseInsensitive = true };
 
         public LoginPage()
         {
@@ -28,67 +28,87 @@ namespace MobileGateway
 
             if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
             {
-                errorLabel.Text = "Будь ласка, заповніть логін і пароль.";
-                errorLabel.IsVisible = true;
+                ShowError("Будь ласка, заповніть логін і пароль.");
                 return;
             }
 
-            var loginRequest = new
+            var loginRequest = new { Email = email, Password = password };
+            var response = await _httpClient.PostAsync($"{ApiBase}/User/authenticate", CreateJsonContent(loginRequest));
+
+            if (!response.IsSuccessStatusCode)
             {
-                Email = email,
-                Password = password
-            };
+                ShowError(response.StatusCode switch
+                {
+                    System.Net.HttpStatusCode.Forbidden => "Пошта не підтверджена.",
+                    System.Net.HttpStatusCode.Unauthorized => "Невірні логін або пароль.",
+                    _ => "Помилка входу. Спробуйте пізніше."
+                });
+                return;
+            }
 
-            var content = new StringContent(
-                JsonSerializer.Serialize(loginRequest),
-                Encoding.UTF8,
-                "application/json");
+            var responseBody = await response.Content.ReadAsStringAsync();
+            var user = JsonSerializer.Deserialize<UserDto>(responseBody, JsonOptions);
 
+            if (user == null)
+            {
+                ShowError("Неможливо прочитати відповідь сервера.");
+                return;
+            }
+
+            Preferences.Set("UserToken", user.Id.ToString());
+            Preferences.Set("Username", user.Username);
+
+            await RegisterMobileDeviceAsync(user.Id);
+            await DisplayAlert("Успіх", $"Вітаю, {user.Username}!", "OK");
+            Application.Current!.MainPage = new MainPage();
+        }
+
+        private async Task RegisterMobileDeviceAsync(int userId)
+        {
             try
             {
-                var response = await _httpClient.PostAsync(ApiUrl, content);
+                var serialNumber = GetDeviceSerialNumber();
+                var checkUrl = $"{ApiBase}/device/user/{userId}/serial/{serialNumber}";
+                var checkResponse = await _httpClient.GetAsync(checkUrl);
 
-                if (!response.IsSuccessStatusCode)
+                if (checkResponse.IsSuccessStatusCode)
                 {
-                    string message = response.StatusCode switch
-                    {
-                        System.Net.HttpStatusCode.Forbidden => "Пошта не підтверджена.",
-                        System.Net.HttpStatusCode.Unauthorized => "Невірні логін або пароль.",
-                        _ => "Помилка входу. Спробуйте пізніше."
-                    };
-
-                    errorLabel.Text = message;
-                    errorLabel.IsVisible = true;
+                    System.Diagnostics.Debug.WriteLine("Пристрій вже зареєстрований.");
                     return;
                 }
 
-                var responseBody = await response.Content.ReadAsStringAsync();
-                var user = JsonSerializer.Deserialize<UserDto>(responseBody, new JsonSerializerOptions
+                var deviceDto = new
                 {
-                    PropertyNameCaseInsensitive = true
-                });
+                    Name = DeviceInfo.Name,
+                    Type = "Mobile",
+                    SerialNumber = serialNumber,
+                    ScheduledTime = DateTime.UtcNow,
+                    UserId = userId
+                };
 
-                if (user == null)
+                var createResponse = await _httpClient.PostAsync($"{ApiBase}/device/add", CreateJsonContent(deviceDto));
+
+                if (!createResponse.IsSuccessStatusCode)
                 {
-                    errorLabel.Text = "Неможливо прочитати відповідь сервера.";
-                    errorLabel.IsVisible = true;
-                    return;
+                    System.Diagnostics.Debug.WriteLine($"Не вдалося зареєструвати пристрій. Статус: {createResponse.StatusCode}");
                 }
-
-                // Зберігаємо токен у Preferences
-                Preferences.Set("UserToken", user.Id.ToString());
-                Preferences.Set("Username", user.Username);
-
-                await DisplayAlert("Успіх", $"Вітаю, {user.Username}!", "OK");
-
-                // Перехід на головну сторінку
-                Application.Current.MainPage = new MainPage();
             }
             catch (Exception ex)
             {
-                errorLabel.Text = "Помилка з'єднання з сервером.";
-                errorLabel.IsVisible = true;
+                System.Diagnostics.Debug.WriteLine($"Помилка реєстрації пристрою: {ex.Message}");
             }
+        }
+
+        private static StringContent CreateJsonContent<T>(T obj) =>
+            new(JsonSerializer.Serialize(obj), Encoding.UTF8, "application/json");
+
+        private static string GetDeviceSerialNumber() =>
+            $"{DeviceInfo.Platform}-{DeviceInfo.Model}-{DeviceInfo.Manufacturer}";
+
+        private void ShowError(string message)
+        {
+            errorLabel.Text = message;
+            errorLabel.IsVisible = true;
         }
 
         public class UserDto

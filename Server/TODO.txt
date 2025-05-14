@@ -1,7 +1,26 @@
 ﻿
 
 
-User register -> User login -> User logout
+Зареєструвати девайс телефон з мобільного додатку,
+Зареєструвати шину розумного дому з веб-додатку
+
+Взяти зареєстрований девайс для юзера та на нього створювати івент
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 Device registration -> Device possible scenarios -> run scenario -> stop scenario
 

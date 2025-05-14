@@ -24,7 +24,7 @@ namespace Server.Data.Entities
 
         public bool IsEmailConfirmed { get; set; } = false;
         public bool Hidden { get; set; } = false;
-
+        public ICollection<Device> Devices { get; set; } = new List<Device>();
         public User(string username, string email, string passwordHash)
         {
             Username = username;

@@ -1,9 +1,37 @@
-﻿@{
-    ViewData["Title"] = Localizer["PageTitle"];
+﻿@model WebApp.Models.EventCreatorModel
+
+@{
+    ViewData["Title"] = "Create Event";
 }
 
-@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+<div class="container py-4">
+    <h3>Create Scheduled Event</h3>
 
-<div class="container py-5">
-    <h2>Logged in</h2>
+    <form asp-action="CreateSingle" method="post">
+        <div class="mb-3">
+            <label asp-for="DeviceId" class="form-label">Device ID</label>
+            <input asp-for="DeviceId" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label asp-for="EventType" class="form-label">Event Type</label>
+            <input asp-for="EventType" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label">Description</label>
+            <input asp-for="Description" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label asp-for="ScheduledTime" class="form-label">Scheduled Time (UTC)</label>
+            <input asp-for="ScheduledTime" type="datetime-local" class="form-control" />
+        </div>
+        <div class="form-check mb-3">
+            <input asp-for="IsRecurring" class="form-check-input" />
+            <label asp-for="IsRecurring" class="form-check-label">Recurring</label>
+        </div>
+        <div class="mb-3">
+            <label asp-for="RecurrenceHours" class="form-label">Recurrence Hours</label>
+            <input asp-for="RecurrenceHours" class="form-control" />
+        </div>
+        <button type="submit" class="btn btn-primary">Create</button>
+    </form>
 </div>

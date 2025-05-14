@@ -8,6 +8,11 @@ namespace Server.Data.DBManager
         public DBSetup(DbContextOptions<DBSetup> options) : base(options) { }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<ScheduledEvent> ScheduledEvents { get; set; }
+        public DbSet<IoTEvent> IoTEvents { get; set; }
+        public DbSet<Device> Devices { get; set; }
+        public DbSet<TriggeredEvent> TriggeredEvents { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

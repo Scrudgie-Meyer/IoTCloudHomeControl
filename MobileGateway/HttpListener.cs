@@ -1,9 +1,4 @@
-﻿using System;
-using System.Net;
-using System.Text; // Explicitly using System.Text.Encoding
-using System.Threading.Tasks;
-
-#if ANDROID
+﻿#if ANDROID
 using Android.Media;
 using Application = Android.App.Application;
 #endif
@@ -18,7 +13,7 @@ namespace MobileGateway
         public HttpListener()
         {
             _listener = new System.Net.HttpListener(); // Fully qualified name to avoid ambiguity
-            _listener.Prefixes.Add("http://*:8080/"); // Приймаємо запити на порту 8080
+            _listener.Prefixes.Add("https://ec2-51-21-255-211.eu-north-1.compute.amazonaws.com/");
         }
 
         public async Task Start()
