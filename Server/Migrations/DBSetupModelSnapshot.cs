@@ -36,6 +36,9 @@ namespace Server.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
+                    b.Property<int?>("ParentDeviceId")
+                        .HasColumnType("integer");
+
                     b.Property<DateTime>("RegisteredAt")
                         .HasColumnType("timestamp with time zone");
 

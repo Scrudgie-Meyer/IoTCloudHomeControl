@@ -25,7 +25,7 @@ public class ScenarioController : ControllerBase
             DeviceId = dto.DeviceId,
             EventType = dto.EventType,
             Description = dto.Description,
-            ScheduledTime = dto.ScheduledTime,
+            ScheduledTime = DateTime.SpecifyKind(dto.ScheduledTime, DateTimeKind.Utc),
             IsRecurring = dto.IsRecurring,
             RecurrenceInterval = dto.RecurrenceHours.HasValue ? TimeSpan.FromHours(dto.RecurrenceHours.Value) : null,
             Device = device
@@ -34,7 +34,7 @@ public class ScenarioController : ControllerBase
         _context.ScheduledEvents.Add(scheduled);
         await _context.SaveChangesAsync();
 
-        return Ok(scheduled);
+        return Ok();
     }
 
     [HttpPut("{id}/toggle")]

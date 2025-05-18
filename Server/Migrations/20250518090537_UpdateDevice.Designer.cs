@@ -12,8 +12,8 @@ using Server.Data.DBManager;
 namespace Server.Migrations
 {
     [DbContext(typeof(DBSetup))]
-    [Migration("20250514184715_AddScheduledEventsAndTriggers1")]
-    partial class AddScheduledEventsAndTriggers1
+    [Migration("20250518090537_UpdateDevice")]
+    partial class UpdateDevice
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,6 +38,9 @@ namespace Server.Migrations
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
+
+                    b.Property<int?>("ParentDeviceId")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("RegisteredAt")
                         .HasColumnType("timestamp with time zone");

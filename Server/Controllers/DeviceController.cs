@@ -77,10 +77,18 @@ namespace Server.Controllers
         {
             var devices = await _context.Devices
                 .Where(d => d.UserId == userId)
+                .Select(d => new UserDeviceDto
+                {
+                    Id = d.Id,
+                    Name = d.Name,
+                    Type = d.Type,
+                    ParentDeviceId = d.ParentDeviceId
+                })
                 .ToListAsync();
 
             return Ok(devices);
         }
+
 
 
     }
@@ -92,5 +100,13 @@ namespace Server.Controllers
         public required string SerialNumber { get; set; }
         public DateTime ScheduledTime { get; set; } = DateTime.UtcNow;
         public int UserId { get; set; }
+    }
+
+    public class UserDeviceDto
+    {
+        public int Id { get; set; }
+        public string? Name { get; set; } = string.Empty;
+        public string Type { get; set; } = string.Empty;
+        public int? ParentDeviceId { get; set; }
     }
 }

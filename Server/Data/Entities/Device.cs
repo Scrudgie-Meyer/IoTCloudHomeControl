@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Server.Data.Entities
 {
@@ -17,11 +18,13 @@ namespace Server.Data.Entities
         public DateTime RegisteredAt { get; set; } = DateTime.UtcNow;
 
         public DateTime ScheduledTime { get; set; }
-
+       
         public bool IsActive { get; set; } = true;
 
         public int UserId { get; set; }
         public User User { get; set; } = null!;
+
+        public int? ParentDeviceId { get; set; }
 
         public ICollection<IoTEvent> IoTEvents { get; set; } = new List<IoTEvent>();
         public ICollection<ScheduledEvent> ScheduledEvents { get; set; } = new List<ScheduledEvent>();
@@ -30,3 +33,5 @@ namespace Server.Data.Entities
 
 
 }
+
+

@@ -9,29 +9,82 @@
 
     <form asp-action="CreateSingle" method="post">
         <div class="mb-3">
-            <label asp-for="DeviceId" class="form-label">Device ID</label>
-            <input asp-for="DeviceId" class="form-control" />
+            <label asp-for="DeviceId" class="form-label">Device</label>
+            <select asp-for="DeviceId" class="form-select"
+                    asp-items="new SelectList((List<WebApp.Models.DeviceOptionModel>)ViewBag.DeviceOptions, nameof(DeviceOptionModel.Id), nameof(DeviceOptionModel.Name))">
+                <option value="">-- Select Device --</option>
+            </select>
         </div>
+
         <div class="mb-3">
             <label asp-for="EventType" class="form-label">Event Type</label>
-            <input asp-for="EventType" class="form-control" />
+            <select asp-for="EventType" class="form-select" id="eventTypeSelect">
+                <option value="">-- Select Event Type --</option>
+                <option value="PushNotification">Push Notification</option>
+                <option value="AudioMessage">Audio Message</option>
+            </select>
         </div>
-        <div class="mb-3">
-            <label asp-for="Description" class="form-label">Description</label>
+
+        <!-- Push Notification field -->
+        <div class="mb-3" id="pushMessageDiv" style="display: none;">
+            <label asp-for="Description" class="form-label">Push Message</label>
             <input asp-for="Description" class="form-control" />
         </div>
+
+        <!-- Audio Message field -->
+        <div class="mb-3" id="audioUrlDiv" style="display: none;">
+            <label asp-for="Description" class="form-label">Audio File URL</label>
+            <input asp-for="Description" class="form-control" />
+        </div>
+
+
+        @* <div class="mb-3">
+            <label asp-for="Description" class="form-label">Description</label>
+            <input asp-for="Description" class="form-control" />
+        </div> *@
+
         <div class="mb-3">
             <label asp-for="ScheduledTime" class="form-label">Scheduled Time (UTC)</label>
             <input asp-for="ScheduledTime" type="datetime-local" class="form-control" />
         </div>
+
         <div class="form-check mb-3">
-            <input asp-for="IsRecurring" class="form-check-input" />
+            <input asp-for="IsRecurring" class="form-check-input" id="IsRecurringToggle" />
             <label asp-for="IsRecurring" class="form-check-label">Recurring</label>
         </div>
-        <div class="mb-3">
-            <label asp-for="RecurrenceHours" class="form-label">Recurrence Hours</label>
-            <input asp-for="RecurrenceHours" class="form-control" />
+
+        <div class="mb-3" id="recurrenceIntervalDiv" style="display:none;">
+            <label asp-for="RecurrenceInterval" class="form-label">Recurrence Interval (Hours)</label>
+            <input asp-for="RecurrenceInterval" class="form-control" />
         </div>
+
         <button type="submit" class="btn btn-primary">Create</button>
     </form>
 </div>
+
+@section Scripts {
+    <script>
+        const toggle = document.getElementById('IsRecurringToggle');
+        const intervalDiv = document.getElementById('recurrenceIntervalDiv');
+
+        function updateVisibility() {
+            intervalDiv.style.display = toggle.checked ? 'block' : 'none';
+        }
+
+        toggle.addEventListener('change', updateVisibility);
+        window.addEventListener('DOMContentLoaded', updateVisibility);
+
+        const eventTypeSelect = document.getElementById('eventTypeSelect');
+        const pushDiv = document.getElementById('pushMessageDiv');
+        const audioDiv = document.getElementById('audioUrlDiv');
+
+        function toggleFields() {
+            const selected = eventTypeSelect.value;
+            pushDiv.style.display = selected === 'PushNotification' ? 'block' : 'none';
+            audioDiv.style.display = selected === 'AudioMessage' ? 'block' : 'none';
+        }
+
+        eventTypeSelect.addEventListener('change', toggleFields);
+        window.addEventListener('DOMContentLoaded', toggleFields);
+    </script>
+}
