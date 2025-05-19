@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
 using WebApp.Models;
 
 
@@ -21,8 +22,40 @@ namespace WebApp.Controllers
             _configuration = configuration;
         }
 
-        public IActionResult ManagePanel() => View();
         public IActionResult Instruction() => View();
+
+        public async Task<IActionResult> ManagePanel()
+        {
+            int userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var apiUrl = _configuration["ApiBaseUrl"] + $"/api/Scenario/user/{userId}/events";
+            var response = await _httpClient.GetAsync(apiUrl);
+
+            if (!response.IsSuccessStatusCode)
+                return View("Error");
+
+            var json = await response.Content.ReadAsStringAsync();
+            var events = JsonSerializer.Deserialize<List<ScheduledEventViewModel>>(json, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+            return View(events);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteEvent(int id)
+        {
+            var apiUrl = _configuration["ApiBaseUrl"] + $"/api/scenario/event/{id}";
+            var response = await _httpClient.DeleteAsync(apiUrl);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                TempData["Error"] = "Failed to delete event.";
+                return RedirectToAction("ManagePanel");
+            }
+
+            return RedirectToAction("ManagePanel");
+        }
 
         public async Task<IActionResult> EventCreator()
         {
@@ -78,7 +111,7 @@ namespace WebApp.Controllers
             return View(dto);
         }
     }
-    
+
 
     public class UserDeviceDto
     {

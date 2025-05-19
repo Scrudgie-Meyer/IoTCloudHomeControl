@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Server.Data.DBManager;
 using Server.Data.Entities;
 
@@ -36,6 +37,72 @@ public class ScenarioController : ControllerBase
 
         return Ok();
     }
+
+    [HttpGet("user/{userId}/events")]
+    public async Task<IActionResult> GetEventsForUser(int userId)
+    {
+        var events = await _context.ScheduledEvents
+            .Include(e => e.Device)
+            .Where(e => e.Device.UserId == userId)
+            .Select(e => new
+            {
+                e.Id,
+                e.DeviceId,
+                DeviceName = e.Device.Name,
+                e.EventType,
+                e.Description,
+                e.ScheduledTime,
+                e.IsRecurring,
+                e.RecurrenceInterval,
+                e.IsEnabled,
+                e.AudioFileName,
+                e.AudioFilePath
+            })
+            .ToListAsync();
+
+        return Ok(events);
+    }
+
+    [HttpGet("user/{userId}/device/{deviceSerialNumber}/events")]
+    public async Task<IActionResult> GetEventsFoDevice(int userId, string deviceSerialNumber)
+    {
+        var events = await _context.ScheduledEvents
+            .Include(e => e.Device)
+            .Where(e =>
+                e.Device.UserId == userId &&
+                e.Device.SerialNumber == deviceSerialNumber)
+            .Select(e => new
+            {
+                e.Id,
+                e.DeviceId,
+                DeviceName = e.Device.Name,
+                e.EventType,
+                e.Description,
+                e.ScheduledTime,
+                e.IsRecurring,
+                e.RecurrenceInterval,
+                e.IsEnabled,
+                e.AudioFileName,
+                e.AudioFilePath
+            })
+            .ToListAsync();
+
+        return Ok(events);
+    }
+
+    [HttpDelete("event/{id}")]
+    public async Task<IActionResult> DeleteEvent(int id)
+    {
+        var evt = await _context.ScheduledEvents.FindAsync(id);
+        if (evt == null)
+            return NotFound("Event not found.");
+
+        _context.ScheduledEvents.Remove(evt);
+        await _context.SaveChangesAsync();
+
+        return Ok(new { message = "Event deleted successfully", evt.Id });
+    }
+
 
     [HttpPut("{id}/toggle")]
     public async Task<IActionResult> ToggleEvent(int id)

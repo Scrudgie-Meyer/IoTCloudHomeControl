@@ -1,9 +1,47 @@
-﻿@{
-    ViewData["Title"] = Localizer["PageTitle"];
-}
+﻿@model List<ScheduledEventViewModel>
 
-@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+<h2>Scheduled Events</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Device</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Time (UTC)</th>
+            <th>Status</th>
+            <th>Actions</th> <!-- Додано -->
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var e in Model)
+        {
+            <tr>
+                <td>@e.DeviceName</td>
+                <td>@e.EventType</td>
+                <td>@e.Description</td>
+                <td>@e.ScheduledTime.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>@(e.IsEnabled ? "Enabled" : "Disabled")</td>
+                <td>
+                    <!-- Кнопка редагування -->
+                    <a asp-controller="User"
+                       asp-action="EditEvent"
+                       asp-route-id="@e.Id"
+                       class="btn btn-sm btn-primary">
+                        Edit
+                    </a>
 
-<div class="container py-5">
-    <h2>Logged in</h2>
-</div>
+                    <!-- Кнопка видалення -->
+                    <form asp-controller="User"
+                          asp-action="DeleteEvent"
+                          asp-route-id="@e.Id"
+                          method="post"
+                          style="display:inline;">
+                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this event?');">
+                            Delete
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

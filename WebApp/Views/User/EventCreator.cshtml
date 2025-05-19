@@ -43,10 +43,15 @@
             <input asp-for="Description" class="form-control" />
         </div> *@
 
+        @{
+            var minDateTime = DateTime.UtcNow.AddMinutes(5);
+            var minValue = minDateTime.ToString("yyyy-MM-ddTHH:mm");
+        }
         <div class="mb-3">
             <label asp-for="ScheduledTime" class="form-label">Scheduled Time (UTC)</label>
-            <input asp-for="ScheduledTime" type="datetime-local" class="form-control" />
+            <input asp-for="ScheduledTime" type="datetime-local" class="form-control" id="scheduledTimeInput" min="@minValue" />
         </div>
+
 
         <div class="form-check mb-3">
             <input asp-for="IsRecurring" class="form-check-input" id="IsRecurringToggle" />
@@ -86,5 +91,26 @@
 
         eventTypeSelect.addEventListener('change', toggleFields);
         window.addEventListener('DOMContentLoaded', toggleFields);
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const input = document.getElementById("scheduledTimeInput");
+
+            // Отримати дату +5 хвилин
+            const now = new Date();
+            now.setMinutes(now.getMinutes() + 5);
+            now.setSeconds(0, 0);
+
+            const minFormatted = now.toISOString().slice(0, 16);
+
+            input.min = minFormatted;
+            input.value = minFormatted;
+
+            // ❗ Перевірка при зміні: не дозволяти менше за min
+            input.addEventListener('change', function () {
+                if (input.value < input.min) {
+                    input.value = input.min;
+                }
+            });
+        });
     </script>
 }

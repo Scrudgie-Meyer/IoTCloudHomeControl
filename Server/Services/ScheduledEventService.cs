@@ -1,8 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Server.Data.DBManager;
-using Server.Data.Entities;
-
-namespace Server.Services
+﻿namespace Server.Services
 {
 
     public class ScheduledEventService : BackgroundService
@@ -16,44 +12,44 @@ namespace Server.Services
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            while (!stoppingToken.IsCancellationRequested)
-            {
-                using var scope = _serviceProvider.CreateScope();
-                var db = scope.ServiceProvider.GetRequiredService<DBSetup>();
+            //while (!stoppingToken.IsCancellationRequested)
+            //{
+            //    using var scope = _serviceProvider.CreateScope();
+            //    var db = scope.ServiceProvider.GetRequiredService<DBSetup>();
 
-                var dueEvents = await db.ScheduledEvents
-                    .Include(e => e.Device)
-                    .Where(e => e.ScheduledTime <= DateTime.UtcNow)
-                    .ToListAsync(stoppingToken);
+            //    var dueEvents = await db.ScheduledEvents
+            //        .Include(e => e.Device)
+            //        .Where(e => e.ScheduledTime <= DateTime.UtcNow)
+            //        .ToListAsync(stoppingToken);
 
-                foreach (var scheduled in dueEvents)
-                {
-                    if (!scheduled.IsExecuted || scheduled.IsRecurring)
-                    {
-                        db.IoTEvents.Add(new IoTEvent
-                        {
-                            DeviceId = scheduled.DeviceId,
-                            EventType = scheduled.EventType,
-                            Description = scheduled.Description,
-                            Timestamp = scheduled.ScheduledTime,
-                            Device = scheduled.Device
-                        });
+            //    foreach (var scheduled in dueEvents)
+            //    {
+            //        if (!scheduled.IsExecuted || scheduled.IsRecurring)
+            //        {
+            //            db.IoTEvents.Add(new IoTEvent
+            //            {
+            //                DeviceId = scheduled.DeviceId,
+            //                EventType = scheduled.EventType,
+            //                Description = scheduled.Description,
+            //                Timestamp = scheduled.ScheduledTime,
+            //                Device = scheduled.Device
+            //            });
 
-                        if (scheduled.IsRecurring && scheduled.RecurrenceInterval.HasValue)
-                        {
-                            scheduled.ScheduledTime = scheduled.ScheduledTime.Add(scheduled.RecurrenceInterval.Value);
-                            scheduled.IsExecuted = false;
-                        }
-                        else
-                        {
-                            scheduled.IsExecuted = true;
-                        }
-                    }
-                }
+            //            if (scheduled.IsRecurring && scheduled.RecurrenceInterval.HasValue)
+            //            {
+            //                scheduled.ScheduledTime = scheduled.ScheduledTime.Add(scheduled.RecurrenceInterval.Value);
+            //                scheduled.IsExecuted = false;
+            //            }
+            //            else
+            //            {
+            //                scheduled.IsExecuted = true;
+            //            }
+            //        }
+            //    }
 
-                await db.SaveChangesAsync(stoppingToken);
-                await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken);
-            }
+            //    await db.SaveChangesAsync(stoppingToken);
+            //    await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken);
+            //}
         }
     }
 }

@@ -1,4 +1,9 @@
-﻿using System.Text;
+﻿#if ANDROID
+using Android.Content;
+using Android.OS;
+#endif
+
+using System.Text;
 using System.Text.Json;
 
 namespace MobileGateway
@@ -17,6 +22,20 @@ namespace MobileGateway
         public LoginPage()
         {
             InitializeComponent();
+            StartForegroundServiceIfNeeded();
+        }
+
+        private void StartForegroundServiceIfNeeded()
+        {
+#if ANDROID
+            var context = Android.App.Application.Context;
+            var intent = new Intent(context, typeof(MobileGateway.EventForegroundService));
+
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
+                context.StartForegroundService(intent);
+            else
+                context.StartService(intent);
+#endif
         }
 
         private async void OnLoginClicked(object sender, EventArgs e)

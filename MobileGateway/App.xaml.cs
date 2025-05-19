@@ -1,40 +1,43 @@
 ﻿
+
+
+#if ANDROID
+using Android.Content;
+using Android.OS;
+#endif
+
 namespace MobileGateway
 {
     public partial class App : Application
     {
-        private HttpListener _httpServer;
-
         public App()
         {
             InitializeComponent();
-
-            _httpServer = new HttpListener();
-            StartServer();
 
             string? token = Preferences.Get("UserToken", null);
 
             if (!string.IsNullOrEmpty(token))
             {
                 MainPage = new MainPage();
+                StartForegroundServiceIfNeeded(); // Сервіс стартує після входу
             }
             else
             {
-                MainPage = new LoginPage(); 
+                MainPage = new LoginPage();
             }
         }
 
-        private async void StartServer()
+        private void StartForegroundServiceIfNeeded()
         {
-            await Task.Run(() => _httpServer.Start());
-        }
+#if ANDROID
+            var context = Android.App.Application.Context;
+            var intent = new Intent(context, typeof(MobileGateway.EventForegroundService));
 
-  
-        protected override void OnResume()
-        {
-            base.OnResume();
-            StartServer();
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
+                context.StartForegroundService(intent);
+            else
+                context.StartService(intent);
+#endif
         }
     }
 }
-
