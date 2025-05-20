@@ -22,7 +22,6 @@ namespace MobileGateway
         public LoginPage()
         {
             InitializeComponent();
-            StartForegroundServiceIfNeeded();
         }
 
         private void StartForegroundServiceIfNeeded()
@@ -78,6 +77,7 @@ namespace MobileGateway
             Preferences.Set("Username", user.Username);
 
             await RegisterMobileDeviceAsync(user.Id);
+            StartForegroundServiceIfNeeded();
             await DisplayAlert("Успіх", $"Вітаю, {user.Username}!", "OK");
             Application.Current!.MainPage = new MainPage();
         }

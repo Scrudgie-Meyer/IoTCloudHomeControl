@@ -66,29 +66,49 @@ public class ScenarioController : ControllerBase
     [HttpGet("user/{userId}/device/{deviceSerialNumber}/events")]
     public async Task<IActionResult> GetEventsFoDevice(int userId, string deviceSerialNumber)
     {
-        var events = await _context.ScheduledEvents
+        var eventsToSend = await _context.ScheduledEvents
             .Include(e => e.Device)
             .Where(e =>
                 e.Device.UserId == userId &&
-                e.Device.SerialNumber == deviceSerialNumber)
-            .Select(e => new
-            {
-                e.Id,
-                e.DeviceId,
-                DeviceName = e.Device.Name,
-                e.EventType,
-                e.Description,
-                e.ScheduledTime,
-                e.IsRecurring,
-                e.RecurrenceInterval,
-                e.IsEnabled,
-                e.AudioFileName,
-                e.AudioFilePath
-            })
+                e.Device.SerialNumber == deviceSerialNumber &&
+                e.IsEnabled) // Only send enabled events
             .ToListAsync();
 
-        return Ok(events);
+        // Prepare response model
+        var response = eventsToSend.Select(e => new
+        {
+            e.Id,
+            e.DeviceId,
+            DeviceName = e.Device.Name,
+            e.EventType,
+            e.Description,
+            e.ScheduledTime,
+            e.IsRecurring,
+            e.RecurrenceInterval,
+            e.IsEnabled,
+            e.AudioFileName,
+            e.AudioFilePath
+        }).ToList();
+
+        // Update non-recurring events: disable after sending
+        var nonRecurringEvents = eventsToSend
+            .Where(e => !e.IsRecurring)
+            .ToList();
+
+        foreach (var evt in nonRecurringEvents)
+        {
+            evt.IsEnabled = false;
+        }
+
+        // Save changes only if needed
+        if (nonRecurringEvents.Count > 0)
+        {
+            await _context.SaveChangesAsync();
+        }
+
+        return Ok(response);
     }
+
 
     [HttpDelete("event/{id}")]
     public async Task<IActionResult> DeleteEvent(int id)
@@ -117,7 +137,7 @@ public class ScenarioController : ControllerBase
         return Ok(new { evt.Id, evt.IsEnabled });
     }
 
-    // 🕒 Update schedule
+    // Update schedule
     [HttpPut("{id}/reschedule")]
     public async Task<IActionResult> RescheduleEvent(int id, [FromBody] DateTime newTime)
     {
@@ -131,7 +151,7 @@ public class ScenarioController : ControllerBase
         return Ok(new { evt.Id, evt.ScheduledTime });
     }
 
-    // 🔊 Upload audio file
+    // Upload audio file
     [HttpPost("{id}/upload-audio")]
     public async Task<IActionResult> UploadAudio(int id, IFormFile file)
     {
@@ -159,7 +179,7 @@ public class ScenarioController : ControllerBase
     }
 
 
-    // 🔊 Download audio file
+    // Download audio file
     [HttpGet("{id}/audio")]
     public async Task<IActionResult> GetAudio(int id)
     {

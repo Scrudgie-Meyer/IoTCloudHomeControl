@@ -13,6 +13,11 @@ namespace MobileGateway
         private bool _isRunning = false;
         private List<ScheduledEvent> _cachedEvents = new();
         private HashSet<int> _shownEventIds = new();
+        private static readonly HttpClient _httpClient = new(
+            new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (_, _, _, _) => true
+            });
 
         public override void OnCreate()
         {
@@ -70,8 +75,8 @@ namespace MobileGateway
             {
                 var now = DateTime.Now;
 
-                // Оновлюємо список подій раз на 30 хв
-                if ((now - lastApiCheck) >= TimeSpan.FromMinutes(30))
+                // Оновлюємо список подій раз на 60 хв
+                if ((now - lastApiCheck) >= TimeSpan.FromMinutes(60))
                 {
                     if (IsInternetAvailable())
                     {
@@ -89,17 +94,15 @@ namespace MobileGateway
                 // Перевіряємо локально, чи настав час для подій
                 foreach (var e in _cachedEvents)
                 {
-                    if (e.IsEnabled &&
-                        e.ScheduledTime <= now &&
-                        !_shownEventIds.Contains(e.Id))
+                    if (e.IsEnabled && e.ScheduledTime <= now && !_shownEventIds.Contains(e.Id))
                     {
-                        ShowPushNotification($"Подія: {e.DeviceName}", e.Description);
+                        ShowPushNotification($"Заплановано на: {e.ScheduledTime:HH:mm dd.MM.yyyy}", e.Description);
                         _shownEventIds.Add(e.Id);
 
                         if (e.IsRecurring && e.RecurrenceInterval.HasValue)
                         {
                             e.ScheduledTime = e.ScheduledTime.Add(e.RecurrenceInterval.Value);
-                            _shownEventIds.Remove(e.Id); // Дозволити ще раз у майбутньому
+                            _shownEventIds.Remove(e.Id);
                         }
                     }
                 }
@@ -113,7 +116,6 @@ namespace MobileGateway
         {
             try
             {
-                using var client = new HttpClient();
                 string? token = Preferences.Get("UserToken", null);
                 if (string.IsNullOrEmpty(token)) return null;
                 string? deviceSerialNumber = $"{DeviceInfo.Platform}-{DeviceInfo.Model}-{DeviceInfo.Manufacturer}";
@@ -121,7 +123,7 @@ namespace MobileGateway
                 var apiUrl = "https://ec2-51-21-255-211.eu-north-1.compute.amazonaws.com/server" +
                              $"/api/Scenario/user/{token}/device/{deviceSerialNumber}/events";
 
-                var response = await client.GetAsync(apiUrl);
+                var response = await _httpClient.GetAsync(apiUrl);
                 if (!response.IsSuccessStatusCode)
                     return null;
 

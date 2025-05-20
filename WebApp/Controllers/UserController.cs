@@ -110,6 +110,29 @@ namespace WebApp.Controllers
             ModelState.AddModelError("", "Помилка створення івенту");
             return View(dto);
         }
+
+
+        public async Task<IActionResult> ToggleEventStatus(int id)
+        {
+            var apiUrl = $"{_configuration["ApiBaseUrl"]}/api/scenario/{id}/toggle";
+
+            var response = await _httpClient.PutAsync(apiUrl, null);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                return Content(json, "application/json");
+            }
+
+            return StatusCode((int)response.StatusCode, "Failed to toggle status.");
+        }
+
+    }
+
+    public class ToggleEventStatusDto
+    {
+        public int Id { get; set; }
+        public bool IsEnabled { get; set; }
     }
 
 

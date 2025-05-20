@@ -20,16 +20,15 @@
                 <td>@e.EventType</td>
                 <td>@e.Description</td>
                 <td>@e.ScheduledTime.ToString("yyyy-MM-dd HH:mm")</td>
-                <td>@(e.IsEnabled ? "Enabled" : "Disabled")</td>
                 <td>
-                    <!-- Кнопка редагування -->
-                    <a asp-controller="User"
-                       asp-action="EditEvent"
-                       asp-route-id="@e.Id"
-                       class="btn btn-sm btn-primary">
-                        Edit
-                    </a>
+                    <input type="checkbox"
+                           class="toggle-switch"
+                           data-event-id="@e.Id"
+                    @(e.IsEnabled ? "checked" : "") />
+                </td>
 
+
+                <td>
                     <!-- Кнопка видалення -->
                     <form asp-controller="User"
                           asp-action="DeleteEvent"
@@ -45,3 +44,37 @@
         }
     </tbody>
 </table>
+
+<style>
+    .toggle-switch {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+    }
+</style>
+
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.toggle-switch').change(function () {
+                const checkbox = $(this);
+                const eventId = checkbox.data('event-id');
+                $.ajax({
+                    url: `/User/ToggleEventStatus?id=${eventId}`,
+                    method: 'POST',
+                    success: function (response) {
+                        //console.log('Toggled:', response);
+                    },
+                    error: function () {
+                        //alert('Failed to toggle the event.');
+                        checkbox.prop('checked', !checkbox.prop('checked'));
+                    }
+                });
+            });
+        });
+    </script>
+
+
+}
