@@ -1,45 +1,46 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
 	<data name="Title" xml:space="preserve">
-    <value>Privacy Policy</value>
+    <value>Create Event</value>
   </data>
-	<data name="Intro" xml:space="preserve">
-    <value>This Privacy Policy describes how your personal information is collected, used, and shared when you use our IoTCloudHomeControl system.</value>
+	<data name="CreateScheduledEvent" xml:space="preserve">
+    <value>Create Scheduled Event</value>
   </data>
-	<data name="Section1Title" xml:space="preserve">
-    <value>1. Information We Collect</value>
+	<data name="Device" xml:space="preserve">
+    <value>Device</value>
   </data>
-	<data name="Section1Body" xml:space="preserve">
-    <value>We may collect device-related data such as device identifiers, sensor readings, and control actions. This data is stored in a Firebase Realtime Database to support remote control and monitoring.</value>
+	<data name="SelectDevice" xml:space="preserve">
+    <value>-- Select Device --</value>
   </data>
-	<data name="Section2Title" xml:space="preserve">
-    <value>2. How We Use Your Information</value>
+	<data name="EventType" xml:space="preserve">
+    <value>Event Type</value>
   </data>
-	<data name="Section2Body" xml:space="preserve">
-    <value>We use your data to operate smart home devices, provide real-time feedback, and improve system performance. We do not sell or share your data.</value>
+	<data name="SelectEventType" xml:space="preserve">
+    <value>-- Select Event Type --</value>
   </data>
-	<data name="Section3Title" xml:space="preserve">
-    <value>3. Data Security</value>
+	<data name="PushNotification" xml:space="preserve">
+    <value>Push Notification</value>
   </data>
-	<data name="Section3Body" xml:space="preserve">
-    <value>We apply reasonable security measures including Firebase authentication to protect your data.</value>
+	<data name="AudioMessage" xml:space="preserve">
+    <value>Audio Message</value>
   </data>
-	<data name="Section4Title" xml:space="preserve">
-    <value>4. Third-Party Services</value>
+	<data name="PushMessage" xml:space="preserve">
+    <value>Push Message</value>
   </data>
-	<data name="Section4Body" xml:space="preserve">
-    <value>We use Firebase by Google. Review their privacy policy at https://firebase.google.com/support/privacy</value>
+	<data name="AudioFileURL" xml:space="preserve">
+    <value>Audio File URL</value>
   </data>
-	<data name="Section5Title" xml:space="preserve">
-    <value>5. Changes</value>
+	<data name="ScheduledTime" xml:space="preserve">
+    <value>Scheduled Time</value>
   </data>
-	<data name="Section5Body" xml:space="preserve">
-    <value>This policy may be updated. Any changes will be posted here with a new date.</value>
+	<data name="Recurring" xml:space="preserve">
+    <value>Recurring</value>
   </data>
-	<data name="Section6Title" xml:space="preserve">
-    <value>6. Contact Us</value>
+	<data name="RecurrenceInterval" xml:space="preserve">
+    <value>Recurrence Interval</value>
   </data>
-	<data name="Section6Body" xml:space="preserve">
-    <value>For questions, contact: wofer151@gmail.com</value>
+	<data name="Create" xml:space="preserve">
+    <value>Create</value>
   </data>
 </root>
+

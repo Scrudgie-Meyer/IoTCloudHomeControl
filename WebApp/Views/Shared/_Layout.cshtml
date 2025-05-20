@@ -48,12 +48,17 @@
                         </li>
                     </ul>
 
-                    <ul class="navbar-nav">
+                    <ul class="navbar-nav d-flex align-items-center">
                         <li class="nav-item">
-                            <form id="langForm" method="post" asp-controller="Home" asp-action="SetLanguage" class="d-inline">
-                                <select name="culture" onchange="document.getElementById('langForm').submit()" class="form-select form-select-sm w-auto me-2">
-                                    <option value="uk-UA" selected="@(CultureInfo.CurrentCulture.Name == "uk-UA")">@Localizer["LanguageUkrainian"]</option>
-                                    <option value="en-US" selected="@(CultureInfo.CurrentCulture.Name == "en-US")">@Localizer["LanguageEnglish"]</option>
+                            <form id="langForm" method="post" asp-controller="Home" asp-action="SetLanguage" class="d-flex align-items-center">
+                                <select name="culture" onchange="document.getElementById('langForm').submit()"
+                                        class="form-select form-select-sm w-auto">
+                                    <option value="uk-UA" selected="@(CultureInfo.CurrentCulture.Name == "uk-UA")">
+                                        @Localizer["LanguageUkrainian"]
+                                    </option>
+                                    <option value="en-US" selected="@(CultureInfo.CurrentCulture.Name == "en-US")">
+                                        @Localizer["LanguageEnglish"]
+                                    </option>
                                 </select>
                             </form>
                         </li>

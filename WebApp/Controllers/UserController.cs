@@ -98,7 +98,7 @@ namespace WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateSingle(EventCreatorModel dto)
         {
-            var json = System.Text.Json.JsonSerializer.Serialize(dto);
+            var json = JsonSerializer.Serialize(dto);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             var apiUrl = $"{_configuration["ApiBaseUrl"]}/api/Scenario/schedule";
             var response = await _httpClient.PostAsync(apiUrl, content);

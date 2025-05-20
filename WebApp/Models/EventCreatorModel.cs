@@ -11,8 +11,8 @@
         public DateTime ScheduledTime { get; set; }
 
         public bool IsRecurring { get; set; } = false;
-         
-        public int? RecurrenceInterval { get; set; }
+
+        public TimeSpan? RecurrenceInterval { get; set; }
     }
 
 

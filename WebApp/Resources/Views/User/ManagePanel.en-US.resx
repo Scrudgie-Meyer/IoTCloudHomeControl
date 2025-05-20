@@ -1,45 +1,54 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
 	<data name="Title" xml:space="preserve">
-    <value>Privacy Policy</value>
+    <value>Existing Scenarios</value>
   </data>
-	<data name="Intro" xml:space="preserve">
-    <value>This Privacy Policy describes how your personal information is collected, used, and shared when you use our IoTCloudHomeControl system.</value>
+	<data name="ScheduledEvents" xml:space="preserve">
+    <value>Existing Scenarios</value>
   </data>
-	<data name="Section1Title" xml:space="preserve">
-    <value>1. Information We Collect</value>
+	<data name="Device" xml:space="preserve">
+    <value>Device</value>
   </data>
-	<data name="Section1Body" xml:space="preserve">
-    <value>We may collect device-related data such as device identifiers, sensor readings, and control actions. This data is stored in a Firebase Realtime Database to support remote control and monitoring.</value>
+	<data name="Type" xml:space="preserve">
+    <value>Type</value>
   </data>
-	<data name="Section2Title" xml:space="preserve">
-    <value>2. How We Use Your Information</value>
+	<data name="Description" xml:space="preserve">
+    <value>Description</value>
   </data>
-	<data name="Section2Body" xml:space="preserve">
-    <value>We use your data to operate smart home devices, provide real-time feedback, and improve system performance. We do not sell or share your data.</value>
+	<data name="ScheduledTime" xml:space="preserve">
+    <value>Scheduled Time</value>
   </data>
-	<data name="Section3Title" xml:space="preserve">
-    <value>3. Data Security</value>
+	<data name="Recurring" xml:space="preserve">
+    <value>Recurring</value>
   </data>
-	<data name="Section3Body" xml:space="preserve">
-    <value>We apply reasonable security measures including Firebase authentication to protect your data.</value>
+	<data name="Interval" xml:space="preserve">
+    <value>Interval</value>
   </data>
-	<data name="Section4Title" xml:space="preserve">
-    <value>4. Third-Party Services</value>
+	<data name="AudioFile" xml:space="preserve">
+    <value>Audio File</value>
   </data>
-	<data name="Section4Body" xml:space="preserve">
-    <value>We use Firebase by Google. Review their privacy policy at https://firebase.google.com/support/privacy</value>
+	<data name="Status" xml:space="preserve">
+    <value>Status</value>
   </data>
-	<data name="Section5Title" xml:space="preserve">
-    <value>5. Changes</value>
+	<data name="Actions" xml:space="preserve">
+    <value>Actions</value>
   </data>
-	<data name="Section5Body" xml:space="preserve">
-    <value>This policy may be updated. Any changes will be posted here with a new date.</value>
+	<data name="Yes" xml:space="preserve">
+    <value>Yes</value>
   </data>
-	<data name="Section6Title" xml:space="preserve">
-    <value>6. Contact Us</value>
+	<data name="No" xml:space="preserve">
+    <value>No</value>
   </data>
-	<data name="Section6Body" xml:space="preserve">
-    <value>For questions, contact: wofer151@gmail.com</value>
+	<data name="N/A" xml:space="preserve">
+    <value>N/A</value>
+  </data>
+	<data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+	<data name="ConfirmDelete" xml:space="preserve">
+    <value>Are you sure you want to delete this event?</value>
+  </data>
+	<data name="RecurringToggleTooltip" xml:space="preserve">
+    <value>Only recurring events can be toggled</value>
   </data>
 </root>

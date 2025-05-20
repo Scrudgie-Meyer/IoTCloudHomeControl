@@ -124,6 +124,12 @@ namespace Server.Controllers
         }
 
 
+
+
+
+
+
+
         // PUT: api/user/{id}/update-status (Update Hidden, IsEmailConfirmed)
         [HttpPut("{id}/update-status")]
         public async Task<IActionResult> UpdateUserStatus(int id, [FromBody] UserStatusUpdate statusUpdate)

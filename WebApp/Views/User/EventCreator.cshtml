@@ -1,71 +1,68 @@
 ﻿@model WebApp.Models.EventCreatorModel
 
-@{
-    ViewData["Title"] = "Create Event";
-}
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 
+@{
+    ViewData["Title"] = Localizer["Title"];
+}
 <div class="container py-4">
-    <h3>Create Scheduled Event</h3>
+    <h3>@Localizer["CreateScheduledEvent"]</h3>
 
     <form asp-action="CreateSingle" method="post">
         <div class="mb-3">
-            <label asp-for="DeviceId" class="form-label">Device</label>
-            <select asp-for="DeviceId" class="form-select"
+            <label asp-for="DeviceId" class="form-label">@Localizer["Device"]</label>
+            <select asp-for="DeviceId" class="form-select" required
                     asp-items="new SelectList((List<WebApp.Models.DeviceOptionModel>)ViewBag.DeviceOptions, nameof(DeviceOptionModel.Id), nameof(DeviceOptionModel.Name))">
-                <option value="">-- Select Device --</option>
+                <option value="">@Localizer["SelectDevice"]</option>
             </select>
+            <span asp-validation-for="DeviceId" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
-            <label asp-for="EventType" class="form-label">Event Type</label>
-            <select asp-for="EventType" class="form-select" id="eventTypeSelect">
-                <option value="">-- Select Event Type --</option>
-                <option value="PushNotification">Push Notification</option>
-                <option value="AudioMessage">Audio Message</option>
+            <label asp-for="EventType" class="form-label">@Localizer["EventType"]</label>
+            <select asp-for="EventType" class="form-select" id="eventTypeSelect" required>
+                <option value="">@Localizer["SelectEventType"]</option>
+                <option value="PushNotification">@Localizer["PushNotification"]</option>
+                <option value="AudioMessage">@Localizer["AudioMessage"]</option>
             </select>
+            <span asp-validation-for="EventType" class="text-danger"></span>
         </div>
 
-        <!-- Push Notification field -->
+
         <div class="mb-3" id="pushMessageDiv" style="display: none;">
-            <label asp-for="Description" class="form-label">Push Message</label>
+            <label asp-for="Description" class="form-label">@Localizer["PushMessage"]</label>
             <input asp-for="Description" class="form-control" />
         </div>
 
-        <!-- Audio Message field -->
         <div class="mb-3" id="audioUrlDiv" style="display: none;">
-            <label asp-for="Description" class="form-label">Audio File URL</label>
+            <label asp-for="Description" class="form-label">@Localizer["AudioFileURL"]</label>
             <input asp-for="Description" class="form-control" />
         </div>
 
-
-        @* <div class="mb-3">
-            <label asp-for="Description" class="form-label">Description</label>
-            <input asp-for="Description" class="form-control" />
-        </div> *@
-
-        @{
-            var minDateTime = DateTime.UtcNow.AddMinutes(5);
-            var minValue = minDateTime.ToString("yyyy-MM-ddTHH:mm");
-        }
         <div class="mb-3">
-            <label asp-for="ScheduledTime" class="form-label">Scheduled Time (UTC)</label>
-            <input asp-for="ScheduledTime" type="datetime-local" class="form-control" id="scheduledTimeInput" min="@minValue" />
+            <label asp-for="ScheduledTime" class="form-label">@Localizer["ScheduledTime"]</label>
+            <input asp-for="ScheduledTime" type="datetime-local" class="form-control" id="scheduledTimeInput" />
         </div>
-
 
         <div class="form-check mb-3">
             <input asp-for="IsRecurring" class="form-check-input" id="IsRecurringToggle" />
-            <label asp-for="IsRecurring" class="form-check-label">Recurring</label>
+            <label asp-for="IsRecurring" class="form-check-label">@Localizer["Recurring"]</label>
         </div>
 
         <div class="mb-3" id="recurrenceIntervalDiv" style="display:none;">
-            <label asp-for="RecurrenceInterval" class="form-label">Recurrence Interval (Hours)</label>
-            <input asp-for="RecurrenceInterval" class="form-control" />
+            <label asp-for="RecurrenceInterval" class="form-label">@Localizer["RecurrenceInterval"]</label>
+            <input asp-for="RecurrenceInterval"
+                   type="time"
+                   step="1"
+                   min="00:05:00"
+                   class="form-control"
+                   value="06:00:00" />
         </div>
 
-        <button type="submit" class="btn btn-primary">Create</button>
+        <button type="submit" class="btn btn-primary">@Localizer["Create"]</button>
     </form>
 </div>
+
 
 @section Scripts {
     <script>
@@ -95,17 +92,16 @@
         document.addEventListener("DOMContentLoaded", function () {
             const input = document.getElementById("scheduledTimeInput");
 
-            // Отримати дату +5 хвилин
             const now = new Date();
             now.setMinutes(now.getMinutes() + 5);
             now.setSeconds(0, 0);
 
-            const minFormatted = now.toISOString().slice(0, 16);
+            const pad = (n) => n.toString().padStart(2, '0');
+            const localDatetime = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`;
 
-            input.min = minFormatted;
-            input.value = minFormatted;
+            input.min = localDatetime;
+            input.value = localDatetime;
 
-            // ❗ Перевірка при зміні: не дозволяти менше за min
             input.addEventListener('change', function () {
                 if (input.value < input.min) {
                     input.value = input.min;

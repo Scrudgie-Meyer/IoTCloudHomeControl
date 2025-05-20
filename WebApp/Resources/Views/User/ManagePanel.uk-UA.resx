@@ -1,45 +1,54 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
 	<data name="Title" xml:space="preserve">
-    <value>Політика конфіденційності</value>
+    <value>Існуючі сценарії</value>
   </data>
-	<data name="Intro" xml:space="preserve">
-    <value>Ця політика конфіденційності описує, як збирається, використовується та передається ваша особиста інформація при використанні системи IoTCloudHomeControl.</value>
+	<data name="ScheduledEvents" xml:space="preserve">
+    <value>Існуючі сценарії</value>
   </data>
-	<data name="Section1Title" xml:space="preserve">
-    <value>1. Яку інформацію ми збираємо</value>
+	<data name="Device" xml:space="preserve">
+    <value>Пристрій</value>
   </data>
-	<data name="Section1Body" xml:space="preserve">
-    <value>Ми можемо збирати дані, пов’язані з пристроями: ідентифікатори, показники сенсорів, керуючі дії. Ці дані зберігаються у Firebase для забезпечення дистанційного керування.</value>
+	<data name="Type" xml:space="preserve">
+    <value>Тип</value>
   </data>
-	<data name="Section2Title" xml:space="preserve">
-    <value>2. Як ми використовуємо вашу інформацію</value>
+	<data name="Description" xml:space="preserve">
+    <value>Опис</value>
   </data>
-	<data name="Section2Body" xml:space="preserve">
-    <value>Ми використовуємо дані для роботи розумних пристроїв, надання зворотного зв’язку в реальному часі та поліпшення системи. Ми не продаємо та не передаємо дані третім сторонам.</value>
+	<data name="ScheduledTime" xml:space="preserve">
+    <value>Час виконання</value>
   </data>
-	<data name="Section3Title" xml:space="preserve">
-    <value>3. Захист даних</value>
+	<data name="Recurring" xml:space="preserve">
+    <value>Повторювана</value>
   </data>
-	<data name="Section3Body" xml:space="preserve">
-    <value>Ми використовуємо розумні заходи захисту, включаючи автентифікацію через Firebase, для безпеки ваших даних.</value>
+	<data name="Interval" xml:space="preserve">
+    <value>Інтервал</value>
   </data>
-	<data name="Section4Title" xml:space="preserve">
-    <value>4. Сторонні сервіси</value>
+	<data name="AudioFile" xml:space="preserve">
+    <value>Аудіофайл</value>
   </data>
-	<data name="Section4Body" xml:space="preserve">
-    <value>Ми використовуємо Firebase від Google. Перегляньте їхню політику конфіденційності: https://firebase.google.com/support/privacy</value>
+	<data name="Status" xml:space="preserve">
+    <value>Статус</value>
   </data>
-	<data name="Section5Title" xml:space="preserve">
-    <value>5. Зміни</value>
+	<data name="Actions" xml:space="preserve">
+    <value>Дії</value>
   </data>
-	<data name="Section5Body" xml:space="preserve">
-    <value>Ця політика може змінюватися. Усі оновлення публікуватимуться на цій сторінці з новою датою.</value>
+	<data name="Yes" xml:space="preserve">
+    <value>Так</value>
   </data>
-	<data name="Section6Title" xml:space="preserve">
-    <value>6. Зв'язок з нами</value>
+	<data name="No" xml:space="preserve">
+    <value>Ні</value>
   </data>
-	<data name="Section6Body" xml:space="preserve">
-    <value>З питань звертайтесь: wofer151@gmail.com</value>
+	<data name="N/A" xml:space="preserve">
+    <value>Н/Д</value>
+  </data>
+	<data name="Delete" xml:space="preserve">
+    <value>Видалити</value>
+  </data>
+	<data name="ConfirmDelete" xml:space="preserve">
+    <value>Ви впевнені, що хочете видалити цю подію?</value>
+  </data>
+	<data name="RecurringToggleTooltip" xml:space="preserve">
+    <value>Лише повторювані події можна вмикати/вимикати</value>
   </data>
 </root>

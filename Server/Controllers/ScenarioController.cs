@@ -28,7 +28,7 @@ public class ScenarioController : ControllerBase
             Description = dto.Description,
             ScheduledTime = DateTime.SpecifyKind(dto.ScheduledTime, DateTimeKind.Utc),
             IsRecurring = dto.IsRecurring,
-            RecurrenceInterval = dto.RecurrenceHours.HasValue ? TimeSpan.FromHours(dto.RecurrenceHours.Value) : null,
+            RecurrenceInterval = dto.RecurrenceInterval.HasValue ? dto.RecurrenceInterval : null,
             Device = device
         };
 
@@ -207,6 +207,6 @@ public class ScheduledEventDto
     public DateTime ScheduledTime { get; set; }
 
     public bool IsRecurring { get; set; } = false;
-    public int? RecurrenceHours { get; set; } // For example: 6 = every 6 hours
+    public TimeSpan? RecurrenceInterval { get; set; }
 }
 
