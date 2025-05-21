@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.Options;
 using System.Globalization;
+using System.Net.Http.Headers;
+using System.Text;
+using WebApp.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,7 +23,7 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-// ?? Add Cookie Authentication
+// Add Cookie Authentication
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
@@ -29,7 +32,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.SlidingExpiration = true; // автооновлення cookie при активності
     });
 
-// ?? Localization
+// Localization
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
 builder.Services.Configure<RequestLocalizationOptions>(options =>
@@ -46,6 +49,17 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
 
     options.RequestCultureProviders.Insert(0, new CookieRequestCultureProvider());
 });
+
+builder.Services.AddHttpClient<AuthorizationController>((provider, client) =>
+{
+    var config = provider.GetRequiredService<IConfiguration>();
+    var username = "admin"; //config["BASIC_AUTH_USERNAME"] ?? "admin";
+    var password = "password"; //config["BASIC_AUTH_PASSWORD"] ?? "password";
+    var byteArray = Encoding.ASCII.GetBytes($"{username}:{password}");
+    var base64 = Convert.ToBase64String(byteArray);
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", base64);
+});
+
 
 var app = builder.Build();
 

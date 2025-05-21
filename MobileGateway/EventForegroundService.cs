@@ -19,6 +19,18 @@ namespace MobileGateway
                 ServerCertificateCustomValidationCallback = (_, _, _, _) => true
             });
 
+
+        static EventForegroundService()
+        {
+            var username = "admin";
+            var password = "password";
+            var credentials = $"{username}:{password}";
+            var encoded = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(credentials));
+
+            _httpClient.DefaultRequestHeaders.Authorization =
+                new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", encoded);
+        }
+
         public override void OnCreate()
         {
             base.OnCreate();

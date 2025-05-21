@@ -16,9 +16,9 @@ namespace WebApp.Controllers
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
 
-        public UserController(HttpClient httpClient, IConfiguration configuration)
+        public UserController(IHttpClientFactory httpClientFactory, IConfiguration configuration)
         {
-            _httpClient = httpClient;
+            _httpClient = httpClientFactory.CreateClient(nameof(AuthorizationController));
             _configuration = configuration;
         }
 
@@ -92,9 +92,6 @@ namespace WebApp.Controllers
             return View();
         }
 
-
-
-        // Надіслати POST до API
         [HttpPost]
         public async Task<IActionResult> CreateSingle(EventCreatorModel dto)
         {
@@ -110,7 +107,6 @@ namespace WebApp.Controllers
             ModelState.AddModelError("", "Помилка створення івенту");
             return View(dto);
         }
-
 
         public async Task<IActionResult> ToggleEventStatus(int id)
         {

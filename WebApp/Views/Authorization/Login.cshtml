@@ -25,9 +25,14 @@
         <label asp-for="RememberMe" class="form-check-label">@Localizer["RememberMe"]</label>
     </div>
 
-    <div class="d-flex justify-content-between">
+    <div class="d-flex align-items-center gap-3">
         <button type="submit" class="btn btn-primary">@Localizer["LoginButton"]</button>
-        <a asp-controller="Authorization" asp-action="Register" class="btn btn-outline-secondary">@Localizer["RegisterButton"]</a>
+        <a asp-controller="Authorization" asp-action="RecoverPassword" class="text-decoration-none">
+            @Localizer["ForgotPasswordLink"]
+        </a>
+        <a asp-controller="Authorization" asp-action="Register" class="btn btn-outline-secondary ms-auto">
+            @Localizer["RegisterButton"]
+        </a>
     </div>
 </form>
 

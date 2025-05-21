@@ -11,10 +11,12 @@ namespace Server.Controllers
     public class UserController : ControllerBase
     {
         private readonly DBSetup _context;
+        // private readonly IEmailService _emailService;
 
-        public UserController(DBSetup context)
+        public UserController(DBSetup context) //, IEmailService emailService
         {
             _context = context;
+            //_emailService = emailService;
         }
 
         // CREATE: api/user
@@ -22,25 +24,25 @@ namespace Server.Controllers
         public async Task<IActionResult> CreateUser([FromBody] User user)
         {
             if (user == null || string.IsNullOrWhiteSpace(user.Username) || string.IsNullOrWhiteSpace(user.Email))
-            {
                 return BadRequest("User data is invalid.");
-            }
 
-            // Check if user already exists
             var existingUser = await _context.Users
                 .FirstOrDefaultAsync(u => u.Email == user.Email || u.Username == user.Username);
 
             if (existingUser != null)
-            {
                 return Conflict("User with the same email or username already exists.");
-            }
 
-            // Add new user to the database
+            user.EmailConfirmationToken = Guid.NewGuid().ToString();
+
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
+            // Надсилаємо email
+            //await _emailService.SendConfirmationEmail(user.Email, user.EmailConfirmationToken);
+
             return CreatedAtAction(nameof(GetUserById), new { id = user.Id }, user);
         }
+
 
         // GET: api/user/{id}
         [HttpGet("{id}")]
@@ -130,16 +132,16 @@ namespace Server.Controllers
 
 
 
-        // PUT: api/user/{id}/update-status (Update Hidden, IsEmailConfirmed)
-        [HttpPut("{id}/update-status")]
-        public async Task<IActionResult> UpdateUserStatus(int id, [FromBody] UserStatusUpdate statusUpdate)
+        // PUT: api/user/{token}/update-status (Update Hidden, IsEmailConfirmed)
+        [HttpPut("{token}/update-status")]
+        public async Task<IActionResult> UpdateUserStatus(string token, [FromBody] UserStatusUpdate statusUpdate)
         {
             if (statusUpdate == null)
             {
                 return BadRequest("Invalid status update data.");
             }
 
-            var user = await _context.Users.FindAsync(id);
+            var user = await _context.Users.FindAsync(token);
             if (user == null)
             {
                 return NotFound("User not found.");
@@ -151,7 +153,7 @@ namespace Server.Controllers
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
 
-            return NoContent(); // Success, no content to return
+            return NoContent();
         }
 
         // PUT: api/user/{id}/update-admin (Update IsAdmin field)

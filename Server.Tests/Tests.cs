@@ -1,4 +1,3 @@
-using Microsoft.EntityFrameworkCore;
 using Server.Controllers;
 using Server.Data.DBManager;
 
@@ -9,25 +8,25 @@ namespace Server.Tests
         private static DBSetup _dbContext;
         private UserController _controller;
 
-        [OneTimeSetUp]
-        public void GlobalSetup()
-        {
-            var options = new DbContextOptionsBuilder<DBSetup>()
-                .UseInMemoryDatabase("SharedTestDB")
-                .Options;
+        //[OneTimeSetUp]
+        //public void GlobalSetup()
+        //{
+        //    var options = new DbContextOptionsBuilder<DBSetup>()
+        //        .UseInMemoryDatabase("SharedTestDB")
+        //        .Options;
 
-            _dbContext = new DBSetup(options);
-        }
+        //    _dbContext = new DBSetup(options);
+        //}
 
-        [SetUp]
-        public void Setup()
-        {
-            // Очистити базу перед кожним тестом
-            _dbContext.Users.RemoveRange(_dbContext.Users);
-            _dbContext.SaveChanges();
+        //[SetUp]
+        //public void Setup()
+        //{
+        //    // Очистити базу перед кожним тестом
+        //    _dbContext.Users.RemoveRange(_dbContext.Users);
+        //    _dbContext.SaveChanges();
 
-            _controller = new UserController(_dbContext);
-        }
+        //    _controller = new UserController(_dbContext);
+        //}
 
         //[Test]
         //public async Task CreateUser_ShouldReturnCreatedUser()

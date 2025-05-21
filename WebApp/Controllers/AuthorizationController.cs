@@ -15,15 +15,17 @@ namespace WebApp.Controllers
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
 
-        public AuthorizationController(HttpClient httpClient, IConfiguration configuration)
+        public AuthorizationController(IHttpClientFactory httpClientFactory, IConfiguration configuration)
         {
-            _httpClient = httpClient;
+            _httpClient = httpClientFactory.CreateClient(nameof(AuthorizationController));
             _configuration = configuration;
         }
 
         public IActionResult Register() => View();
 
         public IActionResult Login() => View();
+
+        public IActionResult RecoverPassword() => View();
 
 
 
@@ -55,6 +57,7 @@ namespace WebApp.Controllers
             );
 
             var apiUrl = _configuration["ApiBaseUrl"] + "/api/User/authenticate";
+
             var response = await _httpClient.PostAsync(apiUrl, content);
 
             if (!response.IsSuccessStatusCode)
@@ -131,6 +134,30 @@ namespace WebApp.Controllers
 
             ModelState.AddModelError(string.Empty, "Registration failed.");
             return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ConfirmEmail([FromQuery] string token)
+        {
+            var apiUrl = _configuration["ApiBaseUrl"] + $"api/user/{token}/update-status";
+
+            var update = new
+            {
+                IsEmailConfirmed = true,
+                Hidden = false
+            };
+
+            var json = JsonSerializer.Serialize(update);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PutAsync(apiUrl, content);
+
+            if (response.StatusCode != HttpStatusCode.NoContent)
+            {
+                return NotFound("Invalid confirmation token.");
+            }
+
+            return Ok("Email confirmed successfully.");
         }
     }
 

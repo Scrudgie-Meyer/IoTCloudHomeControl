@@ -11,6 +11,19 @@
 
         <Button Text="Увійти" Clicked="OnLoginClicked" />
 
+        <HorizontalStackLayout HorizontalOptions="Center" Spacing="30">
+            <Label Text="Забули пароль?" TextColor="Blue">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnForgotPasswordTapped" />
+                </Label.GestureRecognizers>
+            </Label>
+            <Label Text="Зареєструватися" TextColor="Blue">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnRegisterTapped" />
+                </Label.GestureRecognizers>
+            </Label>
+        </HorizontalStackLayout>
+
         <Label x:Name="errorLabel" TextColor="Red" IsVisible="False" />
     </VerticalStackLayout>
 </ContentPage>

@@ -21,6 +21,7 @@ namespace Server.Data.Entities
         public string PasswordHash { get; set; }
 
         public bool IsAdmin { get; set; } = false;
+        public string EmailConfirmationToken { get; set; } = string.Empty;
 
         public bool IsEmailConfirmed { get; set; } = false;
         public bool Hidden { get; set; } = false;
@@ -33,6 +34,7 @@ namespace Server.Data.Entities
             IsAdmin = false;
             IsEmailConfirmed = false;
             Hidden = false;
+            EmailConfirmationToken = string.Empty;
         }
     }
 }

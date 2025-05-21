@@ -5,89 +5,101 @@
     ViewData["Title"] = Localizer["Title"];
 }
 
-<h2>@Localizer["ScheduledEvents"]</h2>
 
-<table class="table table-bordered table-striped">
-    <thead>
-        <tr>
-            <th>@Localizer["Device"]</th>
-            <th>@Localizer["Type"]</th>
-            <th>@Localizer["Description"]</th>
-            <th>@Localizer["ScheduledTimeUtc"]</th>
-            <th>@Localizer["Recurring"]</th>
-            <th>@Localizer["Interval"]</th>
-            <th>@Localizer["AudioFile"]</th>
-            <th>@Localizer["Status"]</th>
-            <th>@Localizer["Actions"]</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var e in Model)
-        {
+
+@if (Model == null || !Model.Any())
+{
+    <div>
+        <h3> @Localizer["NoEventsMessage"]</h3>
+       
+    </div>
+}
+else
+{
+    <h2>@Localizer["ScheduledEvents"]</h2>
+    <table class="table table-bordered table-striped">
+        <thead>
             <tr>
-                <td>@e.DeviceName</td>
-                <td>@e.EventType</td>
-                <td>@e.Description</td>
-                <td>@e.ScheduledTime.ToString("yyyy-MM-dd HH:mm")</td>
-                <td>
-                    @(e.IsRecurring ? Localizer["Yes"] : Localizer["No"])
-                </td>
-                <td>
-                    @if (e.RecurrenceInterval.HasValue)
-                    {
-                        @e.RecurrenceInterval.Value.ToString(@"hh\:mm\:ss")
-                    }
-                    else
-                    {
-                        <span class="text-muted">@Localizer["N/A"]</span>
-                    }
-                </td>
-                <td>
-                    @if (!string.IsNullOrWhiteSpace(e.AudioFileName))
-                    {
-                        <a href="@e.AudioFilePath" target="_blank">@e.AudioFileName</a>
-                    }
-                    else
-                    {
-                        <span class="text-muted">@Localizer["N/A"]</span>
-                    }
-                </td>
-                <td>
-                    @if (e.IsRecurring)
-                    {
-                        <label class="switch">
-                            <input type="checkbox"
-                                   class="toggle-switch"
-                                   data-event-id="@e.Id"
-                            @(e.IsEnabled ? "checked" : "") />
-                            <span class="slider round"></span>
-                        </label>
-                    }
-                    else
-                    {
-                        <label class="switch" title="@Localizer["RecurringToggleTooltip"]">
-                            <input type="checkbox"
-                            @(e.IsEnabled ? "checked" : "") disabled />
-                            <span class="slider round"></span>
-                        </label>
-                    }
-                </td>
-                <td>
-                    <form asp-controller="User"
-                          asp-action="DeleteEvent"
-                          asp-route-id="@e.Id"
-                          method="post"
-                          style="display:inline;">
-                        <button type="submit" class="btn btn-sm btn-danger"
-                                onclick="return confirm('@Localizer["ConfirmDelete"]');">
-                            @Localizer["Delete"]
-                        </button>
-                    </form>
-                </td>
+                <th>@Localizer["Device"]</th>
+                <th>@Localizer["Type"]</th>
+                <th>@Localizer["Description"]</th>
+                <th>@Localizer["ScheduledTime"]</th>
+                <th>@Localizer["Recurring"]</th>
+                <th>@Localizer["Interval"]</th>
+                <th>@Localizer["AudioFile"]</th>
+                <th>@Localizer["Status"]</th>
+                <th>@Localizer["Actions"]</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var e in Model)
+            {
+                <tr>
+                    <td>@e.DeviceName</td>
+                    <td>@e.EventType</td>
+                    <td>@e.Description</td>
+                    <td>@e.ScheduledTime.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>
+                        @(e.IsRecurring ? Localizer["Yes"] : Localizer["No"])
+                    </td>
+                    <td>
+                        @if (e.RecurrenceInterval.HasValue)
+                        {
+                            @e.RecurrenceInterval.Value.ToString(@"hh\:mm\:ss")
+                        }
+                        else
+                        {
+                            <span class="text-muted">@Localizer["N/A"]</span>
+                        }
+                    </td>
+                    <td>
+                        @if (!string.IsNullOrWhiteSpace(e.AudioFileName))
+                        {
+                            <a href="@e.AudioFilePath" target="_blank">@e.AudioFileName</a>
+                        }
+                        else
+                        {
+                            <span class="text-muted">@Localizer["N/A"]</span>
+                        }
+                    </td>
+                    <td>
+                        @if (e.IsRecurring)
+                        {
+                            <label class="switch">
+                                <input type="checkbox"
+                                       class="toggle-switch"
+                                       data-event-id="@e.Id"
+                                @(e.IsEnabled ? "checked" : "") />
+                                <span class="slider round"></span>
+                            </label>
+                        }
+                        else
+                        {
+                            <label class="switch" title="@Localizer["RecurringToggleTooltip"]">
+                                <input type="checkbox"
+                                @(e.IsEnabled ? "checked" : "") disabled />
+                                <span class="slider round"></span>
+                            </label>
+                        }
+                    </td>
+                    <td>
+                        <form asp-controller="User"
+                              asp-action="DeleteEvent"
+                              asp-route-id="@e.Id"
+                              method="post"
+                              style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-danger"
+                                    onclick="return confirm('@Localizer["ConfirmDelete"]');">
+                                @Localizer["Delete"]
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
 
 
 <style>

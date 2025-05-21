@@ -3,6 +3,7 @@ using Android.Content;
 using Android.OS;
 #endif
 
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 
@@ -22,6 +23,13 @@ namespace MobileGateway
         public LoginPage()
         {
             InitializeComponent();
+
+            // Basic Auth
+            var username = "admin";
+            var password = "password";
+            var credentials = $"{username}:{password}";
+            var encoded = Convert.ToBase64String(Encoding.UTF8.GetBytes(credentials));
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", encoded);
         }
 
         private void StartForegroundServiceIfNeeded()
@@ -36,6 +44,19 @@ namespace MobileGateway
                 context.StartService(intent);
 #endif
         }
+
+        private async void OnForgotPasswordTapped(object sender, EventArgs e)
+        {
+            var url = "https://ec2-51-21-255-211.eu-north-1.compute.amazonaws.com/Authorization/RecoverPassword";
+            await Launcher.OpenAsync(url);
+        }
+
+        private async void OnRegisterTapped(object sender, EventArgs e)
+        {
+            var url = "https://ec2-51-21-255-211.eu-north-1.compute.amazonaws.com/Authorization/Register";  // заміни на свою URL
+            await Launcher.OpenAsync(url);
+        }
+
 
         private async void OnLoginClicked(object sender, EventArgs e)
         {

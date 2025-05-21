@@ -7,15 +7,6 @@ namespace WebApp.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-        private readonly HttpClient _httpClient;
-
-        public HomeController(ILogger<HomeController> logger, HttpClient httpClient)
-        {
-            _logger = logger;
-            _httpClient = httpClient;
-        }
-
         [HttpPost]
         public IActionResult SetLanguage(string culture, string returnUrl = "/")
         {
