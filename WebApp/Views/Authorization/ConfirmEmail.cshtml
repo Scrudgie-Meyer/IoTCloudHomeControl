@@ -1,0 +1,18 @@
+﻿@model string
+@{
+    ViewData["Title"] = "Email Confirmation";
+    var isSuccess = Model == "success";
+}
+
+<div class="text-center mt-5">
+    @if (isSuccess)
+    {
+        <h2 class="text-success">Email confirmed successfully!</h2>
+        <p>You can now sign in using your account.</p>
+    }
+    else
+    {
+        <h2 class="text-danger">Invalid or expired confirmation token.</h2>
+        <p>Please make sure the confirmation link is correct or request a new one.</p>
+    }
+</div>

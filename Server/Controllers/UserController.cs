@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Server.Data.DBManager;
 using Server.Data.Entities;
+using Server.Services;
 
 namespace Server.Controllers
 {
@@ -11,12 +12,12 @@ namespace Server.Controllers
     public class UserController : ControllerBase
     {
         private readonly DBSetup _context;
-        // private readonly IEmailService _emailService;
+        private readonly IEmailService _emailService;
 
-        public UserController(DBSetup context) //, IEmailService emailService
+        public UserController(DBSetup context, IEmailService emailService) //
         {
             _context = context;
-            //_emailService = emailService;
+            _emailService = emailService;
         }
 
         // CREATE: api/user
@@ -38,7 +39,7 @@ namespace Server.Controllers
             await _context.SaveChangesAsync();
 
             // Надсилаємо email
-            //await _emailService.SendConfirmationEmail(user.Email, user.EmailConfirmationToken);
+            await _emailService.SendConfirmationEmail(user.Email, user.EmailConfirmationToken);
 
             return CreatedAtAction(nameof(GetUserById), new { id = user.Id }, user);
         }
@@ -107,8 +108,8 @@ namespace Server.Controllers
             if (user == null)
                 return Unauthorized("Invalid credentials.");
 
-            //if (!user.IsEmailConfirmed)
-            //    return Forbid("Email not confirmed.");
+            if (!user.IsEmailConfirmed)
+                return Forbid("Email not confirmed.");
 
             var hasher = new PasswordHasher<User>();
             var verificationResult = hasher.VerifyHashedPassword(user, user.PasswordHash, login.Password);
@@ -141,7 +142,7 @@ namespace Server.Controllers
                 return BadRequest("Invalid status update data.");
             }
 
-            var user = await _context.Users.FindAsync(token);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.EmailConfirmationToken == token);
             if (user == null)
             {
                 return NotFound("User not found.");

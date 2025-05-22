@@ -3,7 +3,29 @@
 
 @{
     ViewData["Title"] = Localizer["RegisterTitle"];
+    var successMessage = TempData["SuccessMessage"] as string;
+    var errorMessage = TempData["ErrorMessage"] as string;
 }
+
+@if (!string.IsNullOrEmpty(successMessage))
+{
+    <div class="alert alert-success d-flex align-items-center" role="alert">
+        <svg class="bi flex-shrink-0 me-2" width="24" height="24" fill="currentColor" role="img" aria-label="Success:">
+            <use xlink:href="#check-circle-fill" />
+        </svg>
+        <div>@successMessage</div>
+    </div>
+}
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger d-flex align-items-center" role="alert">
+        <svg class="bi flex-shrink-0 me-2" width="24" height="24" fill="currentColor" role="img" aria-label="Danger:">
+            <use xlink:href="#exclamation-triangle-fill" />
+        </svg>
+        <div>@errorMessage</div>
+    </div>
+}
+
 
 <h2>@Localizer["RegisterTitle"]</h2>
 
@@ -35,10 +57,6 @@
     <button type="submit" class="btn btn-primary">@Localizer["RegisterButton"]</button>
 </form>
 
-@if (TempData["SuccessMessage"] != null)
-{
-    <div class="alert alert-success mt-3">@TempData["SuccessMessage"]</div>
-}
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

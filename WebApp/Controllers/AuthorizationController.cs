@@ -104,8 +104,13 @@ namespace WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
+            TempData.Clear();
+
             if (!ModelState.IsValid)
+            {
+                TempData["ErrorMessage"] = "Please correct the highlighted errors.";
                 return View(model);
+            }
 
             var hasher = new PasswordHasher<RegisterViewModel>();
             string hashedPassword = hasher.HashPassword(model, model.Password);
@@ -128,18 +133,19 @@ namespace WebApp.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                TempData["SuccessMessage"] = "Registration successful!";
-                return RedirectToAction("Login");
+                TempData["SuccessMessage"] = "Registration successful! Please check your email to confirm your account.";
+                return RedirectToAction("Register");
             }
+            TempData["ErrorMessage"] = "Registration failed. Please try again.";
 
-            ModelState.AddModelError(string.Empty, "Registration failed.");
             return View(model);
         }
+
 
         [HttpGet]
         public async Task<IActionResult> ConfirmEmail([FromQuery] string token)
         {
-            var apiUrl = _configuration["ApiBaseUrl"] + $"api/user/{token}/update-status";
+            var apiUrl = _configuration["ApiBaseUrl"] + $"/api/user/{token}/update-status";
 
             var update = new
             {
@@ -154,10 +160,10 @@ namespace WebApp.Controllers
 
             if (response.StatusCode != HttpStatusCode.NoContent)
             {
-                return NotFound("Invalid confirmation token.");
+                return View("ConfirmEmail", "error");
             }
 
-            return Ok("Email confirmed successfully.");
+            return View("ConfirmEmail", "success");
         }
     }
 

@@ -1,5 +1,4 @@
-﻿using System.Net.Http.Headers;
-using System.Text;
+﻿using System.Text;
 using System.Text.Json;
 
 namespace Server.Services
@@ -45,7 +44,8 @@ namespace Server.Services
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
             _httpClient.DefaultRequestHeaders.Clear();
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("api-key", apiKey);
+            _httpClient.DefaultRequestHeaders.Add("api-key", apiKey);
+            _httpClient.DefaultRequestHeaders.Add("accept", "application/json");
 
             var response = await _httpClient.PostAsync("https://api.brevo.com/v3/smtp/email", content);
 

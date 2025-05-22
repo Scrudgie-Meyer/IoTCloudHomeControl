@@ -135,4 +135,7 @@
   <data name="LoginButton" xml:space="preserve">
     <value>Увійти</value>
   </data>
+  <data name="ForgotPasswordLink" xml:space="preserve">
+    <value>Забули пароль?</value>
+  </data>
 </root>
