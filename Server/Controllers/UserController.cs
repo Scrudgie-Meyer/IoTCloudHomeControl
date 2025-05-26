@@ -14,7 +14,7 @@ namespace Server.Controllers
         private readonly DBSetup _context;
         private readonly IEmailService _emailService;
 
-        public UserController(DBSetup context, IEmailService emailService) //
+        public UserController(DBSetup context, IEmailService emailService)
         {
             _context = context;
             _emailService = emailService;

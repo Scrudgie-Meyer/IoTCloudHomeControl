@@ -10,34 +10,35 @@ namespace MobileGateway
 {
     public partial class App : Application
     {
-        public App()
+        public App(IServiceProvider serviceProvider)
         {
             InitializeComponent();
 
-            string? token = Preferences.Get("UserToken", null);
+            var token = Preferences.Get("UserToken", null);
 
             if (!string.IsNullOrEmpty(token))
             {
-                MainPage = new MainPage();
-                StartForegroundServiceIfNeeded(); // Сервіс стартує після входу
+                MainPage = serviceProvider.GetRequiredService<MainPage>();
+                StartForegroundServiceIfNeeded();
             }
             else
             {
-                MainPage = new LoginPage();
+                MainPage = serviceProvider.GetRequiredService<LoginPage>();
             }
         }
 
         private void StartForegroundServiceIfNeeded()
         {
 #if ANDROID
-            var context = Android.App.Application.Context;
-            var intent = new Intent(context, typeof(MobileGateway.EventForegroundService));
+        var context = Android.App.Application.Context;
+        var intent = new Intent(context, typeof(MobileGateway.EventForegroundService));
 
-            if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
-                context.StartForegroundService(intent);
-            else
-                context.StartService(intent);
+        if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
+            context.StartForegroundService(intent);
+        else
+            context.StartService(intent);
 #endif
         }
     }
+
 }

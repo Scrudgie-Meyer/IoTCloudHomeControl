@@ -3,6 +3,7 @@ using Android.Content;
 using Android.OS;
 #endif
 
+using Microsoft.Extensions.Configuration;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
@@ -17,20 +18,28 @@ namespace MobileGateway
                 ServerCertificateCustomValidationCallback = (_, _, _, _) => true
             });
 
-        private const string ApiBase = "https://ec2-51-21-255-211.eu-north-1.compute.amazonaws.com/server/api";
+        private readonly string ApiBase = string.Empty;
         private static readonly JsonSerializerOptions JsonOptions = new() { PropertyNameCaseInsensitive = true };
+        private readonly IConfiguration _configuration;
+        private readonly IServiceProvider _serviceProvider;
 
-        public LoginPage()
+        public LoginPage(IConfiguration configuration, IServiceProvider serviceProvider)
         {
             InitializeComponent();
 
-            // Basic Auth
-            var username = "admin";
-            var password = "password";
+            _configuration = configuration;
+            _serviceProvider = serviceProvider;
+
+            ApiBase = _configuration["Api:BaseUrl"];
+
+            var username = _configuration["Auth:Username"];
+            var password = _configuration["Auth:Password"];
             var credentials = $"{username}:{password}";
             var encoded = Convert.ToBase64String(Encoding.UTF8.GetBytes(credentials));
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", encoded);
         }
+
+
 
         private void StartForegroundServiceIfNeeded()
         {
@@ -53,7 +62,7 @@ namespace MobileGateway
 
         private async void OnRegisterTapped(object sender, EventArgs e)
         {
-            var url = "https://ec2-51-21-255-211.eu-north-1.compute.amazonaws.com/Authorization/Register";  // заміни на свою URL
+            var url = "https://ec2-51-21-255-211.eu-north-1.compute.amazonaws.com/Authorization/Register";
             await Launcher.OpenAsync(url);
         }
 
@@ -100,7 +109,7 @@ namespace MobileGateway
             await RegisterMobileDeviceAsync(user.Id);
             StartForegroundServiceIfNeeded();
             await DisplayAlert("Успіх", $"Вітаю, {user.Username}!", "OK");
-            Application.Current!.MainPage = new MainPage();
+            Application.Current!.MainPage = _serviceProvider.GetRequiredService<MainPage>();
         }
 
         private async Task RegisterMobileDeviceAsync(int userId)

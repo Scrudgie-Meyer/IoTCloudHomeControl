@@ -23,9 +23,12 @@ public partial class MainPage : ContentPage
     private List<BluetoothDeviceModel> _connectedDevices = new();
 #endif
 
-    public MainPage()
+    private readonly IServiceProvider _serviceProvider;
+
+    public MainPage(IServiceProvider serviceProvider)
     {
         InitializeComponent();
+        _serviceProvider = serviceProvider;
 
         var username = Preferences.Get("Username", null);
         if (!string.IsNullOrEmpty(username))
@@ -34,12 +37,13 @@ public partial class MainPage : ContentPage
         }
     }
 
+
     private void OnLogoutClicked(object sender, EventArgs e)
     {
         Preferences.Remove("UserToken");
         Preferences.Remove("Username");
 
-        Microsoft.Maui.Controls.Application.Current.MainPage = new LoginPage();
+        Microsoft.Maui.Controls.Application.Current.MainPage = _serviceProvider.GetRequiredService<LoginPage>();
     }
 
 
