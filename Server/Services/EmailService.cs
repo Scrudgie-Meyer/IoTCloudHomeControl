@@ -21,7 +21,7 @@ namespace Server.Services
 
         public async Task SendConfirmationEmail(string toEmail, string token)
         {
-            var apiKey = _config["Brevo:ApiKey"];
+            var apiKey = Environment.GetEnvironmentVariable("BrevoApiKey");
             var frontendUrl = _config["AppSettings:FrontendUrl"];
             var confirmationLink = $"{frontendUrl}/Authorization/ConfirmEmail?token={token}";
 
