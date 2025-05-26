@@ -9,8 +9,8 @@
         public BasicAuthMiddleware(RequestDelegate next, IConfiguration config)
         {
             _next = next;
-            _username = "admin"; //config["BASIC_AUTH_USERNAME"] ?? "admin";
-            _password = "password"; //config["BASIC_AUTH_PASSWORD"] ?? "password";
+            _username = config["BASIC_AUTH_USERNAME"] ?? "admin";
+            _password = config["BASIC_AUTH_PASSWORD"] ?? "password";
         }
 
         public async Task InvokeAsync(HttpContext context)
