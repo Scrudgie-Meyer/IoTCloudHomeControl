@@ -53,8 +53,8 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
 builder.Services.AddHttpClient<AuthorizationController>((provider, client) =>
 {
     var config = provider.GetRequiredService<IConfiguration>();
-    var username = config["BASIC_AUTH_USERNAME"] ?? "admin";
-    var password = config["BASIC_AUTH_PASSWORD"] ?? "password";
+    var username = "admin";
+    var password = "password";
     var byteArray = Encoding.ASCII.GetBytes($"{username}:{password}");
     var base64 = Convert.ToBase64String(byteArray);
     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", base64);
